@@ -1,0 +1,2 @@
+# mja
+MahJongg Assistant board
