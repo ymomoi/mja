@@ -1,0 +1,61 @@
+<!DOCTYPE html />
+<html lang="ja">
+    <head>
+        <meta charset="UTF-8" />
+        <title>MahJongg Assistant</title>
+        <script src="jquery-3.5.1.min.js"></script>
+        <script src="jquery-ui.min.js"></script>
+        <link rel="stylesheet" href="jquery-ui.min.css" />
+        <link rel="stylesheet" href="base.css" />
+    </head>
+    <body>
+        <div class="container">
+            <div id="p1" class="box">
+                <span class="kaze">東 親番</span>
+                <span class="reach inactive">リーチ</span>
+                <br />
+                <span class="score" name="ston">25000</span>
+            </div>
+            <div id="p2" class="box rot_r">
+                <span class="kaze">南</span>
+                <span class="reach inactive">リーチ</span>
+                <br />
+                <span class="score" name="snan">25000</span>
+            </div>
+            <div id="p3" class="box rot_o">
+                <span class="kaze">西</span>
+                <span class="reach inactive">リーチ</span>
+                <br />
+                <span class="score" name="ssha">25000</span>
+            </div>
+            <div id="p4" class="box rot_l">
+                <span class="kaze">北</span>
+                <span class="reach inactive">リーチ</span>
+                <br />
+                <span class="score" name="spei">25000</span>
+            </div>
+            <div class="main">
+                <span id="kaze"><span>東</span><span class="inactive">南</span></span>
+                <span id="kyoku">一局</span>
+                <span id="hon"><span class="val">0</span>本</span>
+                <span id="kyotaku">供託 <span class="val">0</span>点</span>
+                <span id="sum">(点棒差分 <span class="val">0</span>点)</span>
+            </div>
+            <div class="nav"></div>
+        </div>
+        <script src="mja.js"></script>
+
+        <div id="sel-kyoku" style="display: none"></div>
+
+        <div id="calc" style="display: none">
+            <ul>
+                <li>東: <input name="ston" type="number" step="100" class="cvalue" /></li>
+                <li>南: <input name="snan" type="number" step="100" class="cvalue" /></li>
+                <li>西: <input name="ssha" type="number" step="100" class="cvalue" /></li>
+                <li>北: <input name="spei" type="number" step="100" class="cvalue" /></li>
+                <li>供託: <input name="kyotaku" type="number" step="1000" class="cvalue" /></li>
+                <li>差し引き: <span id="diff"></span></li>
+            </ul>
+        </div>
+    </body>
+</html>
