@@ -105,10 +105,17 @@ body {
     left: 50px;
     color: red;
 }
+.score_diff {
+    font-size: 20px;
+    font-weight: bold;
+    position: relative;
+    left: 10px;
+}
 .score {
     font-size: 70px;
     font-weight: bold;
     position: relative;
+    top: -10px;
     left: 10px;
 }
 .inactive {

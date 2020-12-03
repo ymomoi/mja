@@ -10,6 +10,34 @@ $(function(){
         $('#sum > .val').text(String(total));
     };
 
+    var update_score_diff = function(){
+        var a = [ 'spei', 'ssha', 'snan', 'ston' ];
+        var s = {};
+        $('.score').each(function(){
+            s[$(this).attr('name')] = Number($(this).text());
+        });
+        $('.score_diff[name="ston"]').text(
+            String(s['spei']-s['ston']) + ' / ' +
+            String(s['ssha']-s['ston']) + ' / ' +
+            String(s['snan']-s['ston'])
+        );
+        $('.score_diff[name="snan"]').text(
+            String(s['ston']-s['snan']) + ' / ' +
+            String(s['spei']-s['snan']) + ' / ' +
+            String(s['ssha']-s['snan'])
+        );
+        $('.score_diff[name="ssha"]').text(
+            String(s['snan']-s['ssha']) + ' / ' +
+            String(s['ston']-s['ssha']) + ' / ' +
+            String(s['spei']-s['ssha'])
+        );
+        $('.score_diff[name="spei"]').text(
+            String(s['ssha']-s['spei']) + ' / ' +
+            String(s['snan']-s['spei']) + ' / ' +
+            String(s['ston']-s['spei'])
+        );
+    };
+
     $('#kaze').click(function(){
         $('#kaze > span').toggleClass('inactive');
     });
@@ -72,6 +100,7 @@ $(function(){
             },
         });
         update_sum();
+        update_score_diff();
     });
 
     $('.score').click(function(){
@@ -121,6 +150,7 @@ $(function(){
                         return;
                     }
                     set_score();
+                    update_score_diff();
                     reset_cvalue();
                     $(this).dialog('close');
                 },

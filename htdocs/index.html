@@ -14,11 +14,15 @@
                 <span class="kaze">東 親番</span>
                 <span class="reach inactive">リーチ</span>
                 <br />
+                <span class="score_diff" name="ston">0/0/0</span>
+                <br />
                 <span class="score" name="ston">25000</span>
             </div>
             <div id="p2" class="box rot_r">
                 <span class="kaze">南</span>
                 <span class="reach inactive">リーチ</span>
+                <br />
+                <span class="score_diff" name="snan">0/0/0</span>
                 <br />
                 <span class="score" name="snan">25000</span>
             </div>
@@ -26,11 +30,15 @@
                 <span class="kaze">西</span>
                 <span class="reach inactive">リーチ</span>
                 <br />
+                <span class="score_diff" name="ssha">0/0/0</span>
+                <br />
                 <span class="score" name="ssha">25000</span>
             </div>
             <div id="p4" class="box rot_l">
                 <span class="kaze">北</span>
                 <span class="reach inactive">リーチ</span>
+                <br />
+                <span class="score_diff" name="spei">0/0/0</span>
                 <br />
                 <span class="score" name="spei">25000</span>
             </div>
@@ -47,7 +55,7 @@
 
         <div id="sel-kyoku" style="display: none"></div>
 
-        <div id="calc" style="display: none">
+        <div id="calc" style="display: none;">
             <ul>
                 <li>東: <input name="ston" type="number" step="100" class="cvalue" /></li>
                 <li>南: <input name="snan" type="number" step="100" class="cvalue" /></li>
@@ -57,5 +65,43 @@
                 <li>差し引き: <span id="diff"></span></li>
             </ul>
         </div>
+
+        <div id="mjcalc" style="display: none;">
+            <span>
+                <label for="han">翻数:</label>
+                <select id="han" name="han">
+                    <option>1</option>
+                    <option>2</option>
+                    <option>3</option>
+                    <option>4</option>
+                    <option>5</option>
+                    <option value="6">6-7</option>
+                    <option value="8">8-10</option>
+                    <option value="11">11-12</option>
+                    <option value="13">13-</option>
+                </select>
+                <label for="fu">符:</label>
+                <select id="fu" name="fu">
+                    <option>20</option>
+                    <option selected>30</option>
+                    <option>40</option>
+                    <option>50</option>
+                    <option>60</option>
+                    <option>70</option>
+                    <option>80</option>
+                    <option>90</option>
+                    <option>100</option>
+                    <option>110</option>
+                    <option>120</option>
+                </select>
+            </span><br />
+            <ul>
+                <li>東家: <input name="wton" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="pton" type="checkbox" value="1" />支払い</li>
+                <li>南家: <input name="wnan" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="pnan" type="checkbox" value="1" />支払い</li>
+                <li>西家: <input name="wsha" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="psha" type="checkbox" value="1" />支払い</li>
+                <li>北家: <input name="wpei" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="ppei" type="checkbox" value="1" />支払い</li>
+            </ul>
+        </div>
+
     </body>
 </html>
