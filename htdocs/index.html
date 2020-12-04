@@ -12,56 +12,65 @@
     <body>
         <div class="container">
             <div id="p1" class="box">
-                <span class="kaze">東 親番</span>
-                <span class="reach inactive">リーチ</span>
+                <span class="kaze"></span>
+                <span class="reach"></span>
                 <br />
-                <span class="score_diff" name="ston">0/0/0</span>
+                <span class="score_diff"></span>
                 <br />
-                <span class="score" name="ston">25000</span>
+                <span class="score"></span>
             </div>
             <div id="p2" class="box rot_r">
-                <span class="kaze">南</span>
-                <span class="reach inactive">リーチ</span>
+                <span class="kaze"></span>
+                <span class="reach"></span>
                 <br />
-                <span class="score_diff" name="snan">0/0/0</span>
+                <span class="score_diff"></span>
                 <br />
-                <span class="score" name="snan">25000</span>
+                <span class="score"></span>
             </div>
             <div id="p3" class="box rot_o">
-                <span class="kaze">西</span>
-                <span class="reach inactive">リーチ</span>
+                <span class="kaze"></span>
+                <span class="reach"></span>
                 <br />
-                <span class="score_diff" name="ssha">0/0/0</span>
+                <span class="score_diff"></span>
                 <br />
-                <span class="score" name="ssha">25000</span>
+                <span class="score"></span>
             </div>
             <div id="p4" class="box rot_l">
-                <span class="kaze">北</span>
-                <span class="reach inactive">リーチ</span>
+                <span class="kaze"></span>
+                <span class="reach"></span>
                 <br />
-                <span class="score_diff" name="spei">0/0/0</span>
+                <span class="score_diff"></span>
                 <br />
-                <span class="score" name="spei">25000</span>
+                <span class="score"></span>
             </div>
-            <div class="main">
-                <span id="kaze"><span>東</span><span class="inactive">南</span></span>
-                <span id="kyoku">一局</span>
-                <span id="hon"><span class="val">0</span>本</span>
-                <span id="kyotaku">供託 <span class="val">0</span>点</span>
-                <span id="sum">(点棒差分 <span class="val">0</span>点)</span>
+            <div class="ba">
+                <span id="kaze"></span>
+                <span id="kyoku"><span class="val"></span>局</span>
+                <span id="hon"><span class="val"></span>本</span>
+                <span id="kyotaku">供託 <span class="val"></span>点</span>
             </div>
-            <div class="nav"></div>
+            <div class="nav">
+                <button type="button" name="ryukyoku">流局精算</button>
+            </div>
         </div>
         <script src="mja.js"></script>
 
-        <div id="sel-kyoku" style="display: none"></div>
+        <div id="ryukyoku" style="display: none;">
+            聴牌 / リーチ
+            <ul>
+                <li>東: <input type="checkbox" name="cton" /> / <input type="checkbox" name="rton" /></li>
+                <li>南: <input type="checkbox" name="cnan" /> / <input type="checkbox" name="rnan" /></li>
+                <li>西: <input type="checkbox" name="csha" /> / <input type="checkbox" name="rsha" /></li>
+                <li>北: <input type="checkbox" name="cpei" /> / <input type="checkbox" name="rpei" /></li>
+            </ul>
+        </div>
 
         <div id="calc" style="display: none;">
             <ul>
-                <li>東: <input name="ston" type="number" step="100" class="cvalue" /></li>
-                <li>南: <input name="snan" type="number" step="100" class="cvalue" /></li>
-                <li>西: <input name="ssha" type="number" step="100" class="cvalue" /></li>
-                <li>北: <input name="spei" type="number" step="100" class="cvalue" /></li>
+                <li>東: <input name="ton" type="number" step="100" class="cvalue" /></li>
+                <li>南: <input name="nan" type="number" step="100" class="cvalue" /></li>
+                <li>西: <input name="sha" type="number" step="100" class="cvalue" /></li>
+                <li>北: <input name="pei" type="number" step="100" class="cvalue" /></li>
                 <li>供託: <input name="kyotaku" type="number" step="1000" class="cvalue" /></li>
                 <li>差し引き: <span id="diff"></span></li>
             </ul>

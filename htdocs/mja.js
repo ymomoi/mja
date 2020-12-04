@@ -1,108 +1,123 @@
 $(function(){
+    var player = [ 'p1', 'p2', 'p3', 'p4' ];
 
-    var update_sum = function(){
-        var total = 100000;
-        $('.score').each(function(){
-            var v = Number($(this).text());
-            total -= v;
-        });
-        total -= Number($('#kyotaku > .val').text());
-        $('#sum > .val').text(String(total));
+    // グローバルデータ
+    var $g = $('body');
+    $g.data({
+        'kaze': 0,
+        'kyoku': 1,
+        'hon': 0,
+        'kyotaku': 0,
+        'sum': 0,
+    });
+    $.each(player, function(i, v){
+        $g.data(v, { 'score': 25000, 'reach': false });
+    });
+
+    // 現在の局でそれぞれの風のプレイヤーを返す
+    var kaze_player = function(k){
+        var index = [ 0, 1, 2, 3 ];
+        index = index.rot_r($g.data('kyoku')-1);
+        switch (k) {
+            case 'ton':
+                return player[index[0]];
+            case 'nan':
+                return player[index[1]];
+            case 'sha':
+                return player[index[2]];
+            default:
+                return player[index[3]];
+        }
     };
 
-    var update_score_diff = function(){
-        var a = [ 'spei', 'ssha', 'snan', 'ston' ];
-        var s = {};
-        $('.score').each(function(){
-            s[$(this).attr('name')] = Number($(this).text());
-        });
-        $('.score_diff[name="ston"]').text(
-            String(s['spei']-s['ston']) + ' / ' +
-            String(s['ssha']-s['ston']) + ' / ' +
-            String(s['snan']-s['ston'])
-        );
-        $('.score_diff[name="snan"]').text(
-            String(s['ston']-s['snan']) + ' / ' +
-            String(s['spei']-s['snan']) + ' / ' +
-            String(s['ssha']-s['snan'])
-        );
-        $('.score_diff[name="ssha"]').text(
-            String(s['snan']-s['ssha']) + ' / ' +
-            String(s['ston']-s['ssha']) + ' / ' +
-            String(s['spei']-s['ssha'])
-        );
-        $('.score_diff[name="spei"]').text(
-            String(s['ssha']-s['spei']) + ' / ' +
-            String(s['snan']-s['spei']) + ' / ' +
-            String(s['ston']-s['spei'])
-        );
+    // 指定されたプレイヤーの点棒を操作する
+    var player_score = function(id, v){
+        var d = $g.data(id);
+        d.score += v;
+        $g.data(id, d);
     };
 
+    // 右ローテート
+    Array.prototype.rot_r = function(n){
+        return this.slice(n, this.length).concat(this.slice(0, n));
+    };
+
+    // 全描画
+    var redraw_all = function(){
+        var kaze = [ '東', '南', '西', '北' ];
+        $('#kaze').text(kaze[$g.data('kaze')]);
+        $('#kyoku > .val').text($g.data('kyoku'));
+        $('#hon > .val').text($g.data('hon'));
+        $('#kyotaku > .val').text($g.data('kyotaku'));
+        $('#sum > .val').text($g.data('sum'));
+
+        var kaze = [ '東(親)', '南', '西', '北' ];
+        kaze = kaze.rot_r(1-$g.data('kyoku'));
+        var s = [];
+        $.each(player, function(i, v){ s.push($g.data(v).score); });
+        var diff = [
+            String(s[3]-s[0]) + '/' + String(s[2]-s[0]) + '/' + String(s[1]-s[0]),
+            String(s[0]-s[1]) + '/' + String(s[3]-s[1]) + '/' + String(s[2]-s[1]),
+            String(s[1]-s[2]) + '/' + String(s[0]-s[2]) + '/' + String(s[3]-s[2]),
+            String(s[2]-s[3]) + '/' + String(s[1]-s[3]) + '/' + String(s[0]-s[3]),
+        ];
+        $.each(player, function(i, v){
+            $(`#${v} > .kaze`).text(kaze.shift());
+            $(`#${v} > .score`).text(s.shift());
+            $(`#${v} > .score_diff`).text(diff.shift());
+            $(`#${v} > .reach`).text($g.data(v).reach ? 'リーチ' : '');
+        });
+    };
+
+    redraw_all();
+
+    // リーチ状態をクリア
+    var clear_reach = function(){
+        $.each(player, function(i, v){
+            var d = $g.data(v);
+            d.reach = false;
+            $g.data(v, d);
+        });
+    };
+
+    // 場風切り替え
     $('#kaze').click(function(){
-        $('#kaze > span').toggleClass('inactive');
+        $g.data('kaze', ($g.data('kaze') + 1) % 4);
+        clear_reach();
+        redraw_all();
     });
 
+    // 局切り替え
     $('#kyoku').click(function(){
-        var p = [ '東 親番', '南', '西', '北' ];
-        var n = [ 'ston', 'snan', 'ssha', 'spei' ];
-        $('#sel-kyoku').dialog({
-            modal: true,
-            title: '局選択',
-            buttons: {
-                '一局': function(){
-                    $('#kyoku').text('一局');
-                    $('#p1 > .kaze').text(p[0]);
-                    $('#p2 > .kaze').text(p[1]);
-                    $('#p3 > .kaze').text(p[2]);
-                    $('#p4 > .kaze').text(p[3]);
-                    $('#p1 > .score').attr('name', n[0]);
-                    $('#p2 > .score').attr('name', n[1]);
-                    $('#p3 > .score').attr('name', n[2]);
-                    $('#p4 > .score').attr('name', n[3]);
-                    $(this).dialog('close');
-                },
-                '二局': function(){
-                    $('#kyoku').text('二局');
-                    $('#p1 > .kaze').text(p[3]);
-                    $('#p2 > .kaze').text(p[0]);
-                    $('#p3 > .kaze').text(p[1]);
-                    $('#p4 > .kaze').text(p[2]);
-                    $('#p1 > .score').attr('name', n[3]);
-                    $('#p2 > .score').attr('name', n[0]);
-                    $('#p3 > .score').attr('name', n[1]);
-                    $('#p4 > .score').attr('name', n[2]);
-                    $(this).dialog('close');
-                },
-                '三局': function(){
-                    $('#kyoku').text('三局');
-                    $('#p1 > .kaze').text(p[2]);
-                    $('#p2 > .kaze').text(p[3]);
-                    $('#p3 > .kaze').text(p[0]);
-                    $('#p4 > .kaze').text(p[1]);
-                    $('#p1 > .score').attr('name', n[2]);
-                    $('#p2 > .score').attr('name', n[3]);
-                    $('#p3 > .score').attr('name', n[0]);
-                    $('#p4 > .score').attr('name', n[1]);
-                    $(this).dialog('close');
-                },
-                '四局': function(){
-                    $('#kyoku').text('四局');
-                    $('#p1 > .kaze').text(p[1]);
-                    $('#p2 > .kaze').text(p[2]);
-                    $('#p3 > .kaze').text(p[3]);
-                    $('#p4 > .kaze').text(p[0]);
-                    $('#p1 > .score').attr('name', n[1]);
-                    $('#p2 > .score').attr('name', n[2]);
-                    $('#p3 > .score').attr('name', n[3]);
-                    $('#p4 > .score').attr('name', n[0]);
-                    $(this).dialog('close');
-                },
-            },
-        });
-        update_sum();
-        update_score_diff();
+        var k = $g.data('kyoku') + 1;
+        if (k > 4) { k = 1; }
+        $g.data('kyoku', k);
+        clear_reach();
+        redraw_all();
     });
 
+    // 本場追加
+    $('#hon').click(function(){
+        $g.data('hon', $g.data('hon') + 1);
+        clear_reach();
+        redraw_all();
+    });
+    $('#hon').dblclick(function(){
+        $g.data('hon', 0);
+        clear_reach();
+        redraw_all();
+    });
+
+    // リーチ状態トグル
+    $('.kaze').click(function(){
+        var id = $(this).parent().attr('id');
+        var d = $g.data(id);
+        d.reach = d.reach ? false : true;
+        $g.data(id, d);
+        redraw_all();
+    });
+
+    // 点数精算ダイアログ
     $('.score').click(function(){
         var calc_diff = function(){
             var diff = 0;
@@ -116,25 +131,24 @@ $(function(){
             calc_diff();
         });
 
+        var reset_cvalue = function(){
+            $('.cvalue').each(function(){
+                $(this).val('');
+            });
+        };
+
         var set_score = function(){
             $('.cvalue').each(function(){
                 var v = Number($(this).val());
                 var n = $(this).attr('name');
                 var o;
                 if (n == 'kyotaku') {
-                    o = Number($("#kyotaku > span").text());
-                    $("#kyotaku > span").text(String(o+v));
+                    $g.data('kyotaku', $g.data('kyotaku') + v);
                 }
                 else {
-                    o = Number($(`.score[name="${n}"]`).text());
-                    $(`.score[name="${n}"]`).text(String(o+v));
+                    var id = kaze_player(n);
+                    player_score(id, v);
                 }
-            });
-        };
-
-        var reset_cvalue = function(){
-            $('.cvalue').each(function(){
-                $(this).val('');
             });
         };
 
@@ -150,23 +164,80 @@ $(function(){
                         return;
                     }
                     set_score();
-                    update_score_diff();
                     reset_cvalue();
+                    redraw_all();
                     $(this).dialog('close');
                 },
-            }
+            },
         });
     });
 
-    $('#hon').click(function(){
-        var n = Number($('#hon > span').text());
-        $('#hon > span').text(String(n+1));
-    });
-    $('#hon').dblclick(function(){
-        $('#hon > span').text('0');
+    // 流局精算ダイアログ
+    $(':button[name="ryukyoku"]').click(function(){
+        $(':checkbox').each(function(){
+            $(this).prop('checked', false);
+        });
+
+        var kaze = [ 'ton', 'nan', 'sha', 'pei' ];
+        $.each(kaze, function(i, k){
+            var id = kaze_player(k);
+            if ($g.data(id).reach) {
+                $(`:checkbox[name="r${k}"]`).prop('checked', true);
+            }
+        });
+
+        $('#ryukyoku').dialog({
+            modal: true,
+            title: '流局精算',
+            buttons: {
+                'キャンセル': function(){ $(this).dialog('close'); },
+                '精算': function(){
+                    var tenpai = [];
+                    var noten = [];
+                    var reach = [];
+                    $.each(kaze, function(i, k){
+                        var id = kaze_player(k);
+                        if ($(`:checkbox[name="c${k}"]`).prop('checked')) {
+                            tenpai.push(id);
+                        } else {
+                            noten.push(id);
+                        }
+                        if ($(`:checkbox[name="r${k}"]`).prop('checked')) {
+                            reach.push(id);
+                        }
+                    });
+
+                    switch (tenpai.length) {
+                        case 1:
+                            player_score(tenpai[0], 3000);
+                            $.each(noten, function(i, id){
+                                player_score(id, -1000);
+                            });
+                            break;
+                        case 2:
+                            player_score(tenpai[0], 1500);
+                            player_score(tenpai[1], 1500);
+                            player_score(noten[0], -1500);
+                            player_score(noten[1], -1500);
+                            break;
+                        case 3:
+                            player_score(noten[0], -3000);
+                            $.each(tenpai, function(i, id){
+                                player_score(id, 1000);
+                            });
+                            break;
+                        default:
+                            break;
+                    }
+                    $.each(reach, function(i, id){
+                        player_score(id, -1000);
+                        $g.data('kyotaku', $g.data('kyotaku') + 1000);
+                    });
+                    redraw_all();
+                    $(this).dialog('close');
+                },
+            },
+        });
     });
 
-    $('.kaze').click(function(){
-        $(this).parent().children('.reach').toggleClass('inactive');
-    });
 });
