@@ -14,6 +14,38 @@ $(function(){
         $g.data(v, { 'score': 25000, 'reach': false });
     });
 
+    // 親/子の点数を返す
+    var round100 = function(n){
+        return Math.ceil(n/100) * 100;
+    };
+    var calc_score = function(han, fu, oya, tsumo){
+        var x;
+        if (oya) {
+            if (han >= 13) { return tsumo ? [ 16000 ] : [ 48000 ]; }
+            if (han >= 11) { return tsumo ? [ 12000 ] : [ 36000 ]; }
+            if (han >= 8) { return tsumo ? [ 8000 ] : [ 24000 ]; }
+            if (han >= 6) { return tsumo ? [ 6000 ] : [ 18000 ]; }
+            if (han >= 5) { return tsumo ? [ 4000 ] : [ 12000 ]; }
+            if (tsumo) {
+                return [ Math.min(round100(Number(fu) * 8 * 2**Number(han)), 4000) ];
+            } else {
+                return [ Math.min(round100(Number(fu) * 12*2 * 2**Number(han)), 12000) ];
+            }
+        } else {
+            if (han >= 13) { return tsumo ? [ 8000, 16000 ] : [ 32000 ]; }
+            if (han >= 11) { return tsumo ? [ 6000, 12000 ] : [ 24000 ]; }
+            if (han >= 8) { return tsumo ? [ 4000, 8000 ] : [ 16000 ]; }
+            if (han >= 6) { return tsumo ? [ 3000, 6000 ] : [ 12000 ]; }
+            if (han >= 5) { return tsumo ? [ 2000, 4000 ] : [ 8000 ]; }
+            if (tsumo) {
+                return [ Math.min(round100(Number(fu) * 4 * 2**Number(han)), 2000),
+                         Math.min(round100(Number(fu) * 8 * 2**Number(han)), 4000) ];
+            } else {
+                return [ Math.min(round100(Number(fu) * 8*2 * 2**Number(han)), 8000) ];
+            }
+        }
+    };
+
     // 現在の局でそれぞれの風のプレイヤーを返す
     var kaze_player = function(k){
         var index = [ 0, 1, 2, 3 ];
