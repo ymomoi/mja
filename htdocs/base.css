@@ -49,15 +49,15 @@ body {
     grid-column: 1/2;
     grid-row: 2/3;
 }
-.ba {
+#ba {
     grid-column: 2/3;
     grid-row: 2/3;
 }
-.nav {
+#nav {
     grid-column: 1/4;
     grid-row: 4/5;
 }
-#kaze {
+#bakaze {
     font-size: 160px;
     font-weight: bold;
     position: absolute;

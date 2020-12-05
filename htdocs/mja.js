@@ -4,7 +4,7 @@ $(function(){
     // グローバルデータ
     var $g = $('body');
     $g.data({
-        'kaze': 0,
+        'bakaze': 0,
         'kyoku': 1,
         'hon': 0,
         'kyotaku': 0,
@@ -77,7 +77,7 @@ $(function(){
     // 全描画
     var redraw_all = function(){
         var bakaze = [ '東', '南', '西', '北' ];
-        $('#kaze').text(bakaze[$g.data('kaze')]);
+        $('#bakaze').text(bakaze[$g.data('bakaze')]);
         $('#kyoku > .val').text($g.data('kyoku'));
         $('#hon > .val').text($g.data('hon'));
         $('#kyotaku > .val').text($g.data('kyotaku'));
@@ -113,8 +113,8 @@ $(function(){
     };
 
     // 場風切り替え
-    $('#kaze').click(function(){
-        $g.data('kaze', ($g.data('kaze') + 1) % 4);
+    $('#bakaze').click(function(){
+        $g.data('bakaze', ($g.data('bakaze') + 1) % 4);
         clear_reach();
         redraw_all();
     });
