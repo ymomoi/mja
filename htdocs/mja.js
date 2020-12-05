@@ -245,7 +245,9 @@ $(function(){
 
         $('#calc').dialog({
             modal: true,
-            title: '点棒受け渡し',
+            position: { my: 'left+5% top+5%', at: 'left+5% top+5%' },
+            width: '500px',
+            title: '点棒受け渡し(マニュアル)',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
                 '更新': function(){
@@ -284,6 +286,8 @@ $(function(){
 
         $('#ryukyoku').dialog({
             modal: true,
+            position: { my: 'left+5% top+5%', at: 'left+5% top+5%' },
+            width: '500px',
             title: '流局精算',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
@@ -362,6 +366,8 @@ $(function(){
 
         $('#diceroll').dialog({
             modal: true,
+            position: { my: 'left+10% top+10%', at: 'left+10% top+10%' },
+            width: '200px',
             title: 'サイコロ',
             buttons: {
                 '振る': function(){ roll(); },
