@@ -76,8 +76,8 @@ $(function(){
 
     // 全描画
     var redraw_all = function(){
-        var kaze = [ '東', '南', '西', '北' ];
-        $('#kaze').text(kaze[$g.data('kaze')]);
+        var bakaze = [ '東', '南', '西', '北' ];
+        $('#kaze').text(bakaze[$g.data('kaze')]);
         $('#kyoku > .val').text($g.data('kyoku'));
         $('#hon > .val').text($g.data('hon'));
         $('#kyotaku > .val').text($g.data('kyotaku'));
