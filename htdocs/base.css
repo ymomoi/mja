@@ -56,6 +56,8 @@ body {
 #nav {
     grid-column: 1/4;
     grid-row: 4/5;
+    margin: 20px;
+    margin-top: 40px;
 }
 #bakaze {
     font-size: 160px;
@@ -110,4 +112,7 @@ body {
     position: relative;
     top: -10px;
     left: 10px;
+}
+button {
+    font-size: 40px;
 }
