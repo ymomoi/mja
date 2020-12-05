@@ -215,6 +215,7 @@ $(function(){
             var id = kaze_player(k);
             if ($g.data(id).reach) {
                 $(`:checkbox[name="r${k}"]`).prop('checked', true);
+                $(`:checkbox[name="c${k}"]`).prop('checked', true);
             }
         });
 
