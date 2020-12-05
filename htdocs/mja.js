@@ -141,7 +141,7 @@ $(function(){
     });
 
     // リーチ状態トグル
-    $('.kaze').click(function(){
+    $('.kaze,.reach').click(function(){
         var id = $(this).parent().attr('id');
         var d = $g.data(id);
         d.reach = d.reach ? false : true;
@@ -272,4 +272,7 @@ $(function(){
         });
     });
 
+    // 日時
+
+    $.clock($('#clock'));
 });
