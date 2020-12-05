@@ -272,7 +272,40 @@ $(function(){
         });
     });
 
-    // 日時
+    // サイコロダイアログ
+    $(':button[name="dice"]').click(function(){
+        var rand6 = function(){
+            return Math.floor(Math.random() * 6) + 1;
+        };
 
+        var dice = function(){
+            var val = [ rand6(), rand6() ];
+            $('#diceroll > .field').html(
+                '<img src="images/' + val[0] + '.png" />&nbsp;' +
+                '<img src="images/' + val[1] + '.png" />'
+            );
+        };
+
+        var count = 0;
+        var roll = function(){
+            if (++count > 20) {
+                count = 0;
+                return;
+            }
+            dice();
+            setTimeout(roll, 50);
+        };
+
+        $('#diceroll').dialog({
+            modal: true,
+            title: 'サイコロ',
+            buttons: {
+                '振る': function(){ roll(); },
+                '閉じる': function(){ $(this).dialog('close'); },
+            },
+        });
+    });
+
+    // 日時
     $.clock($('#clock'));
 });
