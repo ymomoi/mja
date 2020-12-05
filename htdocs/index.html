@@ -12,6 +12,7 @@
     <body>
         <div class="container">
             <div id="p1" class="box">
+                <span class="player"></span>
                 <span class="kaze"></span>
                 <span class="reach"></span>
                 <br />
@@ -20,6 +21,7 @@
                 <span class="score"></span>
             </div>
             <div id="p2" class="box rot_r">
+                <span class="player"></span>
                 <span class="kaze"></span>
                 <span class="reach"></span>
                 <br />
@@ -28,6 +30,7 @@
                 <span class="score"></span>
             </div>
             <div id="p3" class="box rot_o">
+                <span class="player"></span>
                 <span class="kaze"></span>
                 <span class="reach"></span>
                 <br />
@@ -36,6 +39,7 @@
                 <span class="score"></span>
             </div>
             <div id="p4" class="box rot_l">
+                <span class="player"></span>
                 <span class="kaze"></span>
                 <span class="reach"></span>
                 <br />
@@ -64,19 +68,19 @@
         <div id="ryukyoku" style="display: none;">
             聴牌 / リーチ
             <ul>
-                <li>東: <input type="checkbox" name="cton" /> / <input type="checkbox" name="rton" /></li>
-                <li>南: <input type="checkbox" name="cnan" /> / <input type="checkbox" name="rnan" /></li>
-                <li>西: <input type="checkbox" name="csha" /> / <input type="checkbox" name="rsha" /></li>
-                <li>北: <input type="checkbox" name="cpei" /> / <input type="checkbox" name="rpei" /></li>
+                <li>東: <input type="checkbox" name="cton" /> / <input type="checkbox" name="rton" /> (<span class="nton"></span>)</li>
+                <li>南: <input type="checkbox" name="cnan" /> / <input type="checkbox" name="rnan" /> (<span class="nnan"></span>)</li>
+                <li>西: <input type="checkbox" name="csha" /> / <input type="checkbox" name="rsha" /> (<span class="nsha"></span>)</li>
+                <li>北: <input type="checkbox" name="cpei" /> / <input type="checkbox" name="rpei" /> (<span class="npei"></span>)</li>
             </ul>
         </div>
 
         <div id="calc" style="display: none;">
             <ul>
-                <li>東: <input name="ton" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
-                <li>南: <input name="nan" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
-                <li>西: <input name="sha" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
-                <li>北: <input name="pei" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
+                <li>東: <input name="ton" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="nton"></span>)</li>
+                <li>南: <input name="nan" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="nnan"></span>)</li>
+                <li>西: <input name="sha" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="nsha"></span>)</li>
+                <li>北: <input name="pei" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="npei"></span>)</li>
                 <li>供託: <input name="kyotaku" type="number" step="1000" max="4000" min="-20000" autocomplete="off" class="cvalue" /></li>
                 <li>差し引き: <span id="diff"></span></li>
             </ul>
@@ -124,6 +128,15 @@
             <span class="field">
                 <img src="images/1.png" />&nbsp;<img src="images/1.png" />
             </span>
+        </div>
+
+        <div id="playerinfo" style="display: none;">
+            <ul>
+                <li>p1 名前: <input name="p1" type="text" /></li>
+                <li>p2 名前: <input name="p2" type="text" /></li>
+                <li>p3 名前: <input name="p3" type="text" /></li>
+                <li>p4 名前: <input name="p4" type="text" /></li>
+            </ul>
         </div>
 
         <script src="clock.js"></script>

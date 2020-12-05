@@ -1,5 +1,6 @@
 $(function(){
     var player = [ 'p1', 'p2', 'p3', 'p4' ];
+    var kaze = [ 'ton', 'nan', 'sha', 'pei' ];
 
     // グローバルデータ
     var $g = $('body');
@@ -11,7 +12,7 @@ $(function(){
         'sum': 0,
     });
     $.each(player, function(i, v){
-        $g.data(v, { 'score': 25000, 'reach': false });
+        $g.data(v, { 'name': `${v}`, 'score': 25000, 'reach': false });
     });
 
     // 親/子の点数を返す
@@ -69,6 +70,13 @@ $(function(){
         $g.data(id, d);
     };
 
+    // 指定されたプレイヤー名を設定する
+    var player_name = function(id, v){
+        var d = $g.data(id);
+        d.name = v;
+        $g.data(id, d);
+    };
+
     // 右ローテート
     Array.prototype.rot_r = function(n){
         return this.slice(n, this.length).concat(this.slice(0, n));
@@ -83,8 +91,8 @@ $(function(){
         $('#kyotaku > .val').text($g.data('kyotaku'));
         $('#sum > .val').text($g.data('sum'));
 
-        var kaze = [ '東(親)', '南', '西', '北' ];
-        kaze = kaze.rot_r(1-$g.data('kyoku'));
+        var jikaze = [ '東(親)', '南', '西', '北' ];
+        jikaze = jikaze.rot_r(1-$g.data('kyoku'));
         var s = [];
         $.each(player, function(i, v){ s.push($g.data(v).score); });
         var diff = [
@@ -94,7 +102,8 @@ $(function(){
             String(s[2]-s[3]) + '/' + String(s[1]-s[3]) + '/' + String(s[0]-s[3]),
         ];
         $.each(player, function(i, v){
-            $(`#${v} > .kaze`).text(kaze.shift());
+            $(`#${v} > .player`).text($g.data(v).name);
+            $(`#${v} > .kaze`).text(jikaze.shift());
             $(`#${v} > .score`).text(s.shift());
             $(`#${v} > .score_diff`).text(diff.shift());
             $(`#${v} > .reach`).text($g.data(v).reach ? 'リーチ' : '');
@@ -149,8 +158,58 @@ $(function(){
         redraw_all();
     });
 
-    // 点数精算ダイアログ
+    // プレイヤー情報入力ダイアログ
+    $('.player').click(function(){
+        $.each(player, function(i, v){
+            $(`:input[name="${v}"]`).val($g.data(v).name);
+        });
+
+        $('#playerinfo').dialog({
+            modal: true,
+            title: 'プレイヤー情報入力',
+            buttons: {
+                'キャンセル': function(){ $(this).dialog('close'); },
+                '更新': function(){
+                    $.each(player, function(i, v){
+                        var n = $(`:input[name="${v}"]`).val();
+                        player_name(v, n);
+                    });
+                    redraw_all();
+                    $(this).dialog('close');
+                },
+            },
+        });
+    });
+
+    // 点数精算(自動入力)ダイアログ
+    $('#kyotaku').click(function(){
+        var hon = $g.data('hon');
+        var kyotaku = $g.data('kyotaku');
+
+        $('#mjcalc > .ba').text(
+            hon + '本場(供託' + kyotaku + '点)'
+        );
+
+        $('#mjcalc').dialog({
+            modal: true,
+            title: '点棒受け渡し',
+            buttons: {
+                'キャンセル': function(){ $(this).dialog('close'); },
+                '更新': function(){
+                    redraw_all();
+                    $(this).dialog('close');
+                },
+            },
+        });
+    });
+
+    // 点数精算(マニュアル入力)ダイアログ
     $('.score').click(function(){
+        $.each(kaze, function(i, v){
+            var id = kaze_player(v);
+            $(`.n${v}`).text($g.data(id).name);
+        });
+
         var calc_diff = function(){
             var diff = 0;
             $('.cvalue').each(function(){
@@ -206,11 +265,15 @@ $(function(){
 
     // 流局精算ダイアログ
     $(':button[name="ryukyoku"]').click(function(){
+        $.each(kaze, function(i, v){
+            var id = kaze_player(v);
+            $(`.n${v}`).text($g.data(id).name);
+        });
+
         $(':checkbox').each(function(){
             $(this).prop('checked', false);
         });
 
-        var kaze = [ 'ton', 'nan', 'sha', 'pei' ];
         $.each(kaze, function(i, k){
             var id = kaze_player(k);
             if ($g.data(id).reach) {

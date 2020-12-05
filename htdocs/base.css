@@ -98,6 +98,13 @@ body {
     top: 400px;
     left: 260px;
 }
+.player {
+    font-size: 15px;
+    font-weight: bold;
+    position: absolute;
+    top: -30px;
+    left: 10px;
+}
 .kaze {
     font-size: 40px;
     font-weight: bold;
