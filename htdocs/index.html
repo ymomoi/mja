@@ -73,20 +73,20 @@
 
         <div id="calc" style="display: none;">
             <ul>
-                <li>東: <input name="ton" type="number" step="100" class="cvalue" /></li>
-                <li>南: <input name="nan" type="number" step="100" class="cvalue" /></li>
-                <li>西: <input name="sha" type="number" step="100" class="cvalue" /></li>
-                <li>北: <input name="pei" type="number" step="100" class="cvalue" /></li>
-                <li>供託: <input name="kyotaku" type="number" step="1000" class="cvalue" /></li>
+                <li>東: <input name="ton" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
+                <li>南: <input name="nan" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
+                <li>西: <input name="sha" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
+                <li>北: <input name="pei" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /></li>
+                <li>供託: <input name="kyotaku" type="number" step="1000" max="4000" min="-20000" autocomplete="off" class="cvalue" /></li>
                 <li>差し引き: <span id="diff"></span></li>
             </ul>
         </div>
 
         <div id="mjcalc" style="display: none;">
-            <span>
-                <label for="han">翻数:</label>
+            <div>
+                <label for="han">翻:</label>
                 <select id="han" name="han">
-                    <option>1</option>
+                    <option selected>1</option>
                     <option>2</option>
                     <option>3</option>
                     <option>4</option>
@@ -95,7 +95,7 @@
                     <option value="8">8-10</option>
                     <option value="11">11-12</option>
                     <option value="13">13-</option>
-                </select>
+                </select> &nbsp;&nbsp;
                 <label for="fu">符:</label>
                 <select id="fu" name="fu">
                     <option>20</option>
@@ -110,12 +110,13 @@
                     <option>110</option>
                     <option>120</option>
                 </select>
-            </span><br />
+            </div>
+            <div class="ba"></div>
             <ul>
-                <li>東家: <input name="wton" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="pton" type="checkbox" value="1" />支払い</li>
-                <li>南家: <input name="wnan" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="pnan" type="checkbox" value="1" />支払い</li>
-                <li>西家: <input name="wsha" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="psha" type="checkbox" value="1" />支払い</li>
-                <li>北家: <input name="wpei" type="checkbox" value="1" />上がり &nbsp;&nbsp; <input name="ppei" type="checkbox" value="1" />支払い</li>
+                <li>東家: <input name="wton" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="pton" type="checkbox" value="1" />支払</li>
+                <li>南家: <input name="wnan" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="pnan" type="checkbox" value="1" />支払</li>
+                <li>西家: <input name="wsha" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="psha" type="checkbox" value="1" />支払</li>
+                <li>北家: <input name="wpei" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="ppei" type="checkbox" value="1" />支払</li>
             </ul>
         </div>
 
