@@ -20,7 +20,6 @@ $(function(){
         return Math.ceil(n/100) * 100;
     };
     var calc_score = function(han, fu, oya, tsumo){
-        var x;
         if (oya) {
             if (han >= 13) { return tsumo ? [ 16000 ] : [ 48000 ]; }
             if (han >= 11) { return tsumo ? [ 12000 ] : [ 36000 ]; }
@@ -182,20 +181,125 @@ $(function(){
     });
 
     // 点数精算(自動入力)ダイアログ
-    $('#kyotaku').click(function(){
+    $('.score').click(function(){
+        $.each(kaze, function(i, v){
+            var id = kaze_player(v);
+            $(`.n-${v}`).text($g.data(id).name);
+        });
+        $(':checkbox[name|="w"]').prop('checked', false);
+        $(':checkbox[name|="p"]').prop('checked', false);
+
         var hon = $g.data('hon');
         var kyotaku = $g.data('kyotaku');
-
         $('#mjcalc > .ba').text(
-            hon + '本場(供託' + kyotaku + '点)'
+            hon + '本場 (' + hon*300 + '点 + 供託' + kyotaku + '点)'
         );
+
+        var clear_scores = function(){
+            $(':input[name|="s"]').val('');
+            $('#score').text('');
+        };
+
+        var update_scores = function(){
+            clear_scores();
+            if (check_inputs() != true) { return; }
+            var han = $('#han').val();
+            var fu = $('#fu').val();
+            var oya = $(':checkbox[name="w-ton"]:checked').length > 0 ? true : false;
+            var tsumo = $(':checkbox[name|="p"]:checked').length == 3 ? true : false;
+            var score = calc_score(han, fu, oya, tsumo);
+
+            var winner = $(':checkbox[name|="w"]:checked').val();
+            var loser = $(':checkbox[name|="p"]:checked').val();
+            if (tsumo) {
+                if (oya) {
+                    $('#score').text('子 ' + score[0] + '点ALL');
+                    score[0] += 100*hon;
+                    $(`:input[name="s-ton"]`).val(score[0]*3 + kyotaku);
+                    $(`:input[name="s-nan"]`).val(-score[0]);
+                    $(`:input[name="s-sha"]`).val(-score[0]);
+                    $(`:input[name="s-pei"]`).val(-score[0]);
+                }
+                else {
+                    $('#score').text('親 ' + score[1] + '点、子 ' + score[0] + '点');
+                    score[0] += 100*hon;
+                    score[1] += 100*hon;
+                    $(`:input[name="s-ton"]`).val(-score[1]);
+                    $(`:input[name="s-nan"]`).val(-score[0]);
+                    $(`:input[name="s-sha"]`).val(-score[0]);
+                    $(`:input[name="s-pei"]`).val(-score[0]);
+                    $(`:input[name="s-${winner}"]`).val(score[1] + score[0]*2 + kyotaku);
+                }
+
+            }
+            else {
+                $('#score').text(score[0] + '点');
+                score[0] += 300*hon;
+                $(`:input[name="s-${winner}"]`).val(score[0]+kyotaku);
+                $(`:input[name="s-${loser}"]`).val(-score[0]);
+            }
+        };
+
+        $('#han,#fu').change(function(){ update_scores(); });
+        $(':checkbox[name|="w"]').change(function(){ update_scores(); });
+        $(':checkbox[name|="p"]').change(function(){ update_scores(); });
+
+        // 1家以上のあがり、あがりと支払が同時にチェックされないよう制御
+        $(':checkbox[name$="ton"]').click(function(){
+            $(':checkbox[name$="ton"]').prop('checked', false);
+            $(this).prop('checked', true);
+        });
+        $(':checkbox[name$="nan"]').click(function(){
+            $(':checkbox[name$="nan"]').prop('checked', false);
+            $(this).prop('checked', true);
+        });
+        $(':checkbox[name$="sha"]').click(function(){
+            $(':checkbox[name$="sha"]').prop('checked', false);
+            $(this).prop('checked', true);
+        });
+        $(':checkbox[name$="pei"]').click(function(){
+            $(':checkbox[name$="pei"]').prop('checked', false);
+            $(this).prop('checked', true);
+        });
+
+        $(':checkbox[name|="w"]').click(function(){
+            $(':checkbox[name|="w"]').prop('checked', false);
+            $(this).prop('checked', true);
+        });
+
+        // あがりと支払家数のチェック
+        var check_inputs = function(){
+            if ($(':checkbox[name|="w"]:checked').length != 1) {
+                return false;
+            }
+            if ($(':checkbox[name|="p"]:checked').length != 1 &&
+                $(':checkbox[name|="p"]:checked').length != 3) {
+                return false;
+            }
+            return true;
+        };
 
         $('#mjcalc').dialog({
             modal: true,
+            position: { my: 'left+5% top+5%', at: 'left+5% top+5%' },
+            width: '500px',
             title: '点棒受け渡し',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
-                '更新': function(){
+                '表示更新': function(){},
+                '支払実行': function(){
+                    if (check_inputs() != true) {
+                        alert('入力値が不正です。確認してください。');
+                        return;
+                    }
+                    update_scores();
+                    $.each(kaze, function(i, v){
+                        var id = kaze_player(v);
+                        var s = Number($(`:input[name="s-${v}"]`).val());
+                        player_score(id, s);
+                    });
+                    $g.data('kyotaku', 0);
+                    clear_scores();
                     redraw_all();
                     $(this).dialog('close');
                 },
@@ -204,10 +308,10 @@ $(function(){
     });
 
     // 点数精算(マニュアル入力)ダイアログ
-    $('.score').click(function(){
+    $(':button[name="score_manual"]').click(function(){
         $.each(kaze, function(i, v){
             var id = kaze_player(v);
-            $(`.n${v}`).text($g.data(id).name);
+            $(`.n-${v}`).text($g.data(id).name);
         });
 
         var calc_diff = function(){
@@ -269,7 +373,7 @@ $(function(){
     $(':button[name="ryukyoku"]').click(function(){
         $.each(kaze, function(i, v){
             var id = kaze_player(v);
-            $(`.n${v}`).text($g.data(id).name);
+            $(`.n-${v}r`).text($g.data(id).name);
         });
 
         $(':checkbox').each(function(){
@@ -278,10 +382,17 @@ $(function(){
 
         $.each(kaze, function(i, k){
             var id = kaze_player(k);
+            // リーチしていたプレイヤーを自動チェック
             if ($g.data(id).reach) {
-                $(`:checkbox[name="r${k}"]`).prop('checked', true);
-                $(`:checkbox[name="c${k}"]`).prop('checked', true);
+                $(`:checkbox[name="r-${k}r"]`).prop('checked', true);
+                $(`:checkbox[name="c-${k}r"]`).prop('checked', true);
             }
+            // リーチをチェックしたら、聴牌も同時にチェックする
+            $(`:checkbox[name="r-${k}r"]`).change(function(){
+                if ($(this).prop('checked')) {
+                    $(`:checkbox[name$="c-${k}r"]`).prop('checked', true);
+                }
+            });
         });
 
         $('#ryukyoku').dialog({
@@ -297,12 +408,12 @@ $(function(){
                     var reach = [];
                     $.each(kaze, function(i, k){
                         var id = kaze_player(k);
-                        if ($(`:checkbox[name="c${k}"]`).prop('checked')) {
+                        if ($(`:checkbox[name="c-${k}r"]`).prop('checked')) {
                             tenpai.push(id);
                         } else {
                             noten.push(id);
                         }
-                        if ($(`:checkbox[name="r${k}"]`).prop('checked')) {
+                        if ($(`:checkbox[name="r-${k}r"]`).prop('checked')) {
                             reach.push(id);
                         }
                     });

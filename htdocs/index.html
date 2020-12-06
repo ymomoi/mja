@@ -62,25 +62,27 @@
             </div>
             <div id="nav">
                 <button type="button" name="ryukyoku">流局精算</button>
+                &nbsp;&nbsp;
+                <button type="button" name="score_manual">手動精算</button>
             </div>
         </div>
 
         <div id="ryukyoku" style="display: none;">
             聴牌 / リーチ
             <ul>
-                <li>東: <input type="checkbox" name="cton" /> / <input type="checkbox" name="rton" /> (<span class="nton"></span>)</li>
-                <li>南: <input type="checkbox" name="cnan" /> / <input type="checkbox" name="rnan" /> (<span class="nnan"></span>)</li>
-                <li>西: <input type="checkbox" name="csha" /> / <input type="checkbox" name="rsha" /> (<span class="nsha"></span>)</li>
-                <li>北: <input type="checkbox" name="cpei" /> / <input type="checkbox" name="rpei" /> (<span class="npei"></span>)</li>
+                <li>東: <input type="checkbox" name="c-tonr" /> / <input type="checkbox" name="r-tonr" /> (<span class="n-tonr"></span>)</li>
+                <li>南: <input type="checkbox" name="c-nanr" /> / <input type="checkbox" name="r-nanr" /> (<span class="n-nanr"></span>)</li>
+                <li>西: <input type="checkbox" name="c-shar" /> / <input type="checkbox" name="r-shar" /> (<span class="n-shar"></span>)</li>
+                <li>北: <input type="checkbox" name="c-peir" /> / <input type="checkbox" name="r-peir" /> (<span class="n-peir"></span>)</li>
             </ul>
         </div>
 
         <div id="calc" style="display: none;">
             <ul>
-                <li>東: <input name="ton" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="nton"></span>)</li>
-                <li>南: <input name="nan" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="nnan"></span>)</li>
-                <li>西: <input name="sha" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="nsha"></span>)</li>
-                <li>北: <input name="pei" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="npei"></span>)</li>
+                <li>東: <input name="ton" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="n-ton"></span>)</li>
+                <li>南: <input name="nan" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="n-nan"></span>)</li>
+                <li>西: <input name="sha" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="n-sha"></span>)</li>
+                <li>北: <input name="pei" type="number" step="100" max="48000" min="-48000" autocomplete="off" class="cvalue" /> (<span class="n-pei"></span>)</li>
                 <li>供託: <input name="kyotaku" type="number" step="1000" max="4000" min="-20000" autocomplete="off" class="cvalue" /></li>
                 <li>差し引き: <span id="diff"></span></li>
             </ul>
@@ -88,7 +90,7 @@
 
         <div id="mjcalc" style="display: none;">
             <div>
-                <label for="han">翻:</label>
+                <label for="han">翻数:</label>
                 <select id="han" name="han">
                     <option selected>1</option>
                     <option>2</option>
@@ -115,13 +117,23 @@
                     <option>120</option>
                 </select>
             </div>
-            <div class="ba"></div>
             <ul>
-                <li>東家: <input name="wton" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="pton" type="checkbox" value="1" />支払</li>
-                <li>南家: <input name="wnan" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="pnan" type="checkbox" value="1" />支払</li>
-                <li>西家: <input name="wsha" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="psha" type="checkbox" value="1" />支払</li>
-                <li>北家: <input name="wpei" type="checkbox" value="1" />上り &nbsp;&nbsp; <input name="ppei" type="checkbox" value="1" />支払</li>
+                <li>東家: <input name="w-ton" type="checkbox" value="ton" />あがり &nbsp;&nbsp; <input name="p-ton" type="checkbox" value="ton" />支払 (<span class="n-ton"></span>)</li>
+                <li>南家: <input name="w-nan" type="checkbox" value="nan" />あがり &nbsp;&nbsp; <input name="p-nan" type="checkbox" value="nan" />支払 (<span class="n-nan"></span>)</li>
+                <li>西家: <input name="w-sha" type="checkbox" value="sha" />あがり &nbsp;&nbsp; <input name="p-sha" type="checkbox" value="sha" />支払 (<span class="n-sha"></span>)</li>
+                <li>北家: <input name="w-pei" type="checkbox" value="pei" />あがり &nbsp;&nbsp; <input name="p-pei" type="checkbox" value="pei" />支払 (<span class="n-pei"></span>)</li>
             </ul>
+            <div class="ba"></div>
+            <div>&nbsp;</div>
+            <div>
+                精算 (支払: <span id="score"></span>)
+                <ul>
+                    <li>東家: <input type="number" name="s-ton" readonly /> (<span class="n-ton"></span>)</li>
+                    <li>南家: <input type="number" name="s-nan" readonly /> (<span class="n-nan"></span>)</li>
+                    <li>西家: <input type="number" name="s-sha" readonly /> (<span class="n-sha"></span>)</li>
+                    <li>北家: <input type="number" name="s-pei" readonly /> (<span class="n-pei"></span>)</li>
+                </ul>
+            </div>
         </div>
 
         <div id="diceroll" style="display: none;">
