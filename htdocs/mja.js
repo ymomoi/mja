@@ -1,8 +1,8 @@
 $(function(){
-    var player = [ 'p1', 'p2', 'p3', 'p4' ];
-    var kaze = [ 'ton', 'nan', 'sha', 'pei' ];
-
+    //--------------------------------
     // グローバルデータ
+    const player = [ 'p1', 'p2', 'p3', 'p4' ];
+    const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     var $g = $('body');
     $g.data({
         'bakaze': 0,
@@ -15,6 +15,7 @@ $(function(){
         $g.data(v, { 'name': `${v}`, 'score': 25000, 'reach': false });
     });
 
+    //--------------------------------
     // 親/子の点数を返す
     var round100 = function(n){
         return Math.ceil(n/100) * 100;
@@ -81,10 +82,15 @@ $(function(){
         return this.slice(n, this.length).concat(this.slice(0, n));
     };
 
+    // 場風
+    var bakaze = function() {
+        var str = [ '東', '南', '西', '北' ];
+        return str[$g.data('bakaze')];
+    };
+
     // 全描画
     var redraw_all = function(){
-        var bakaze = [ '東', '南', '西', '北' ];
-        $('#bakaze').text(bakaze[$g.data('bakaze')]);
+        $('#bakaze').text(bakaze());
         $('#kyoku > .val').text($g.data('kyoku'));
         $('#hon > .val').text($g.data('hon'));
         $('#kyotaku > .val').text($g.data('kyotaku'));
@@ -108,8 +114,7 @@ $(function(){
             $(`#${v} > .reach`).text($g.data(v).reach ? 'リーチ' : '');
         });
     };
-
-    redraw_all();
+    redraw_all(); // 初回実行
 
     // リーチ状態をクリア
     var clear_reach = function(){
@@ -120,6 +125,32 @@ $(function(){
         });
     };
 
+    // ログを出力
+    var log_output = function(str){
+		var n = new Date();
+		var hh = n.getHours();
+		var mm = n.getMinutes();
+		var ss = n.getSeconds();
+		hh = hh < 10 ? "0"+hh : hh;
+		mm = mm < 10 ? "0"+mm : mm;
+        ss = ss < 10 ? "0"+ss : ss;
+        var t = $('#log').html();
+        $('#log').html(t + hh+':'+mm+':'+ss + ' ' + str + "\n");
+    };
+
+    // 点数状況を出力
+    var output_scores = function(){
+        var str = bakaze() + $g.data('kyoku') + '局 ' +
+            $g.data('hon') + '本場: ' + "<br />\n";
+        $.each(player, function(i, v){
+            var p = $g.data(v);
+            str += v + ' ' + p.name + ' ' + p.score + '点, ';
+        });
+        str += '(供託 ' + $g.data('kyotaku') + '点)<br />';
+        log_output(str);
+    };
+
+    //--------------------------------
     // 場風切り替え
     $('#bakaze').click(function(){
         $g.data('bakaze', ($g.data('bakaze') + 1) % 4);
@@ -157,6 +188,7 @@ $(function(){
         redraw_all();
     });
 
+    //--------------------------------
     // プレイヤー情報入力ダイアログ
     $('.player').click(function(){
         $.each(player, function(i, v){
@@ -180,6 +212,7 @@ $(function(){
         });
     });
 
+    //--------------------------------
     // 点数精算(自動入力)ダイアログ
     $('.score').click(function(){
         $.each(kaze, function(i, v){
@@ -300,6 +333,7 @@ $(function(){
                     });
                     $g.data('kyotaku', 0);
                     clear_scores();
+                    output_scores();
                     redraw_all();
                     $(this).dialog('close');
                 },
@@ -307,6 +341,7 @@ $(function(){
         });
     });
 
+    //--------------------------------
     // 点数精算(マニュアル入力)ダイアログ
     $(':button[name="score_manual"]').click(function(){
         $.each(kaze, function(i, v){
@@ -362,6 +397,7 @@ $(function(){
                     }
                     set_score();
                     reset_cvalue();
+                    output_scores();
                     redraw_all();
                     $(this).dialog('close');
                 },
@@ -369,6 +405,7 @@ $(function(){
         });
     });
 
+    //--------------------------------
     // 流局精算ダイアログ
     $(':button[name="ryukyoku"]').click(function(){
         $.each(kaze, function(i, v){
@@ -444,6 +481,7 @@ $(function(){
                         player_score(id, -1000);
                         $g.data('kyotaku', $g.data('kyotaku') + 1000);
                     });
+                    output_scores();
                     redraw_all();
                     $(this).dialog('close');
                 },
@@ -451,6 +489,7 @@ $(function(){
         });
     });
 
+    //--------------------------------
     // サイコロダイアログ
     $(':button[name="dice"]').click(function(){
         var rand6 = function(){
@@ -487,6 +526,7 @@ $(function(){
         });
     });
 
+    //--------------------------------
     // 日時
     $.clock($('#clock'));
 });

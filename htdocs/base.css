@@ -70,6 +70,12 @@ body {
     margin: 20px;
     margin-top: 40px;
 }
+#log {
+    grid-column: 1/4;
+    grid-row: 5/6;
+    margin: 20px;
+    font-size: 10pt;
+}
 #bakaze {
     font-size: 160px;
     font-weight: bold;
