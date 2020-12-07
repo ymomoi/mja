@@ -2,7 +2,6 @@ $(function(){
     //--------------------------------
     // グローバル設定
     $.cookie.json = true;
-    $.cookie.raw = true;
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     var $g = $('body');
@@ -220,6 +219,8 @@ $(function(){
 
         $('#playerinfo').dialog({
             modal: true,
+            position: { my: 'left+10% top+10%', at: 'left+10% top+10%' },
+            width: '400px',
             title: 'プレイヤー情報入力',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
@@ -518,7 +519,7 @@ $(function(){
     //--------------------------------
     // クッキーに保存されたステータスを読み込む
     $(':button[name="load_status"]').click(function(){
-        $('#load_status').text($.cookie('status'));
+        $('#load_status').text(JSON.stringify($.cookie('status')));
 
         $('#load_status').dialog({
             modal: true,
@@ -528,7 +529,7 @@ $(function(){
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
                 'リストア': function(){
-                    var st = JSON.parse($.cookie('status'));
+                    var st = $.cookie('status');
                     $g.data('bakaze', st.bakaze);
                     $g.data('kyoku', st.kyoku);
                     $g.data('hon', st.hon);
