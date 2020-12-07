@@ -1,6 +1,8 @@
 $(function(){
     //--------------------------------
-    // グローバルデータ
+    // グローバル設定
+    $.cookie.json = true;
+    $.cookie.raw = true;
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     var $g = $('body');
@@ -9,7 +11,6 @@ $(function(){
         'kyoku': 1,
         'hon': 0,
         'kyotaku': 0,
-        'sum': 0,
     });
     $.each(player, function(i, v){
         $g.data(v, { 'name': `${v}`, 'score': 25000, 'reach': false });
@@ -94,8 +95,7 @@ $(function(){
         $('#kyoku > .val').text($g.data('kyoku'));
         $('#hon > .val').text($g.data('hon'));
         $('#kyotaku > .val').text($g.data('kyotaku'));
-        $('#sum > .val').text($g.data('sum'));
-
+ 
         var jikaze = [ '東(親)', '南', '西', '北' ];
         jikaze = jikaze.rot_r(1-$g.data('kyoku'));
         var s = [];
@@ -148,6 +148,29 @@ $(function(){
         });
         str += '(供託 ' + $g.data('kyotaku') + '点)<br />';
         log_output(str);
+    };
+
+    // 場とプレイヤー情報をcookieに保存
+    var save_status = function(){
+        var s = {
+            'bakaze': $g.data('bakaze'),
+            'kyoku': $g.data('kyoku'),
+            'hon': $g.data('hon'),
+            'kyotaku': $g.data('kyotaku'),
+        };
+        $.each(player, function(i, v){
+            var p = $g.data(v);
+            s[v] = {
+                'name': p.name,
+                'score': p.score,
+            };
+        });
+        $.cookie('status', s);
+    };
+
+    // cookieから場とプレイヤー情報を取得
+    var load_status = function(){
+        return $.cookie('status');
     };
 
     //--------------------------------
@@ -334,6 +357,7 @@ $(function(){
                     $g.data('kyotaku', 0);
                     clear_scores();
                     output_scores();
+                    save_status();
                     redraw_all();
                     $(this).dialog('close');
                 },
@@ -398,6 +422,7 @@ $(function(){
                     set_score();
                     reset_cvalue();
                     output_scores();
+                    save_status();
                     redraw_all();
                     $(this).dialog('close');
                 },
@@ -480,6 +505,36 @@ $(function(){
                     $.each(reach, function(i, id){
                         player_score(id, -1000);
                         $g.data('kyotaku', $g.data('kyotaku') + 1000);
+                    });
+                    output_scores();
+                    save_status();
+                    redraw_all();
+                    $(this).dialog('close');
+                },
+            },
+        });
+    });
+
+    //--------------------------------
+    // クッキーに保存されたステータスを読み込む
+    $(':button[name="load_status"]').click(function(){
+        $('#load_status').text($.cookie('status'));
+
+        $('#load_status').dialog({
+            modal: true,
+            position: { my: 'left+10% top+10%', at: 'left+10% top+10%' },
+            width: '400px',
+            title: '前局終了時のステータスをリストア',
+            buttons: {
+                'キャンセル': function(){ $(this).dialog('close'); },
+                'リストア': function(){
+                    var st = JSON.parse($.cookie('status'));
+                    $g.data('bakaze', st.bakaze);
+                    $g.data('kyoku', st.kyoku);
+                    $g.data('hon', st.hon);
+                    $g.data('kyotaku', st.kyotaku);
+                    $.each(player, function(i, v){
+                        $g.data(v, { 'name': st[v].name, 'score': st[v].score, 'reach': false });
                     });
                     output_scores();
                     redraw_all();
