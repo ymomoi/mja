@@ -4,6 +4,8 @@ $(function(){
     $.cookie.json = true;
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
+    const kaze_str = [ '東', '南', '西', '北' ];
+    const jikaze_str = [ '東(親)', '南', '西', '北' ];
     var $g = $('body');
     $g.data({
         'bakaze': 0,
@@ -84,8 +86,7 @@ $(function(){
 
     // 場風
     var bakaze = function() {
-        var str = [ '東', '南', '西', '北' ];
-        return str[$g.data('bakaze')];
+        return kaze_str[$g.data('bakaze')];
     };
 
     // 全描画
@@ -94,8 +95,8 @@ $(function(){
         $('#kyoku > .val').text($g.data('kyoku'));
         $('#hon > .val').text($g.data('hon'));
         $('#kyotaku > .val').text($g.data('kyotaku'));
- 
-        var jikaze = [ '東(親)', '南', '西', '北' ];
+
+        var jikaze = jikaze_str;
         jikaze = jikaze.rot_r(1-$g.data('kyoku'));
         var s = [];
         $.each(player, function(i, v){ s.push($g.data(v).score); });
@@ -239,12 +240,25 @@ $(function(){
     //--------------------------------
     // 点数精算(自動入力)ダイアログ
     $('.score').click(function(){
+        var id;
         $.each(kaze, function(i, v){
-            var id = kaze_player(v);
+            id = kaze_player(v);
             $(`.n-${v}`).text($g.data(id).name);
         });
         $(':checkbox[name|="w"]').prop('checked', false);
         $(':checkbox[name|="p"]').prop('checked', false);
+
+        id = $(this).parent().attr('id');
+        switch ($(`#${id} > .kaze`).text()) {
+            case '南':
+                $(':checkbox[name="w-nan"]').prop('checked', true); break;
+            case '西':
+                $(':checkbox[name="w-sha"]').prop('checked', true); break;
+            case '北':
+                $(':checkbox[name="w-pei"]').prop('checked', true); break;
+            default:
+                $(':checkbox[name="w-ton"]').prop('checked', true); break;
+        }
 
         var hon = $g.data('hon');
         var kyotaku = $g.data('kyotaku');
