@@ -206,7 +206,16 @@ $(function(){
     $('.kaze,.reach').click(function(){
         var id = $(this).parent().attr('id');
         var d = $g.data(id);
-        d.reach = d.reach ? false : true;
+        if (d.reach) {
+            d.reach = false;
+            d.score += 1000;
+            $g.data('kyotaku', $g.data('kyotaku')-1000);
+        }
+        else {
+            d.reach = true;
+            d.score -= 1000;
+            $g.data('kyotaku', $g.data('kyotaku')+1000);
+        }
         $g.data(id, d);
         redraw_all();
     });
@@ -371,6 +380,7 @@ $(function(){
                     });
                     $g.data('kyotaku', 0);
                     clear_scores();
+                    clear_reach();
                     output_scores();
                     save_status();
                     redraw_all();
@@ -436,6 +446,7 @@ $(function(){
                     }
                     set_score();
                     reset_cvalue();
+                    clear_reach();
                     output_scores();
                     save_status();
                     redraw_all();
@@ -461,15 +472,8 @@ $(function(){
             var id = kaze_player(k);
             // リーチしていたプレイヤーを自動チェック
             if ($g.data(id).reach) {
-                $(`:checkbox[name="r-${k}r"]`).prop('checked', true);
                 $(`:checkbox[name="c-${k}r"]`).prop('checked', true);
             }
-            // リーチをチェックしたら、聴牌も同時にチェックする
-            $(`:checkbox[name="r-${k}r"]`).change(function(){
-                if ($(this).prop('checked')) {
-                    $(`:checkbox[name$="c-${k}r"]`).prop('checked', true);
-                }
-            });
         });
 
         $('#ryukyoku').dialog({
@@ -482,16 +486,12 @@ $(function(){
                 '精算': function(){
                     var tenpai = [];
                     var noten = [];
-                    var reach = [];
                     $.each(kaze, function(i, k){
                         var id = kaze_player(k);
                         if ($(`:checkbox[name="c-${k}r"]`).prop('checked')) {
                             tenpai.push(id);
                         } else {
                             noten.push(id);
-                        }
-                        if ($(`:checkbox[name="r-${k}r"]`).prop('checked')) {
-                            reach.push(id);
                         }
                     });
 
@@ -517,10 +517,7 @@ $(function(){
                         default:
                             break;
                     }
-                    $.each(reach, function(i, id){
-                        player_score(id, -1000);
-                        $g.data('kyotaku', $g.data('kyotaku') + 1000);
-                    });
+                    clear_reach();
                     output_scores();
                     save_status();
                     redraw_all();
