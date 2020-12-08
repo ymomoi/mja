@@ -531,7 +531,7 @@ $(function(){
     });
 
     //--------------------------------
-    // クッキーに保存されたステータスを読み込む
+    // リストア: クッキーに保存されたステータスを読み込む
     $(':button[name="load_status"]').click(function(){
         $('#load_status').text(JSON.stringify($.cookie('status')));
 
@@ -557,6 +557,13 @@ $(function(){
                 },
             },
         });
+    });
+
+    //--------------------------------
+    // 本場リセットボタン
+    $(':button[name="hon_clear"]').click(function(){
+        $g.data('hon', 0);
+        redraw_all();
     });
 
     //--------------------------------
