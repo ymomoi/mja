@@ -7,7 +7,9 @@
 
 ![screenshot1](images/sc-01.jpg)
 
-![screenshot2](images/sc-03.jpg)
+![screenshot4](images/sc-04.jpg)
+
+![screenshot3](images/sc-03.jpg)
 
 ![screenshot2](images/sc-02.png)
 
