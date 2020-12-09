@@ -200,10 +200,10 @@ $(function(){
 
     //--------------------------------
     // 場風切り替え
-    $('#bakaze').click(function(){ change_bakaze(); });
+    $('#bakaze').click(change_bakaze);
 
     // 局切り替え
-    $('#kyoku').click(function(){ change_kyoku(); });
+    $('#kyoku').click(change_kyoku);
 
     // 本場追加
     $('#hon').click(function(){
@@ -433,9 +433,7 @@ $(function(){
             $('#diff').text(String(diff));
             return diff;
         };
-        $('.cvalue').focus(function(){
-            calc_diff();
-        });
+        $('.cvalue').focus(calc_diff);
 
         var reset_cvalue = function(){
             $('.cvalue').each(function(){
