@@ -218,7 +218,7 @@ $(function(){
     });
 
     // リーチ状態トグル
-    $('.kaze,.reach,.player').click(function(){
+    $('.kaze,.reach,.player,.score_diff').click(function(){
         var id = $(this).parent().attr('id');
         var d = $g.data(id);
         if (d.reach) {
