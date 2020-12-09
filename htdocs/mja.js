@@ -421,6 +421,7 @@ $(function(){
     $(':button[name="score_manual"]').click(function(){
         $.each(kaze, function(i, v){
             var id = kaze_player(v);
+            $(`.s-${v}`).text($g.data(id).score);
             $(`.n-${v}`).text($g.data(id).name);
         });
 
@@ -460,7 +461,7 @@ $(function(){
         $('#calc').dialog({
             modal: true,
             position: { my: 'left+5% top+5%', at: 'left top' },
-            width: '500px',
+            width: '700px',
             title: '点棒受け渡し(マニュアル)',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
