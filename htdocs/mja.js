@@ -177,22 +177,33 @@ $(function(){
         return $.cookie('status');
     };
 
-    //--------------------------------
-    // 場風切り替え
-    $('#bakaze').click(function(){
+    // 場風を切り替える
+    var change_bakaze = function(){
         $g.data('bakaze', ($g.data('bakaze') + 1) % 4);
         clear_reach();
         redraw_all();
-    });
+    };
 
-    // 局切り替え
-    $('#kyoku').click(function(){
+    // 次の局へ進む
+    var change_kyoku = function(){
         var k = $g.data('kyoku') + 1;
         if (k > 4) { k = 1; }
         $g.data('kyoku', k);
-        clear_reach();
-        redraw_all();
-    });
+        if ($g.data('kyoku') == 1) {
+            change_bakaze();
+        }
+        else {
+            clear_reach();
+            redraw_all();
+        }
+    };
+
+    //--------------------------------
+    // 場風切り替え
+    $('#bakaze').click(function(){ change_bakaze(); });
+
+    // 局切り替え
+    $('#kyoku').click(function(){ change_kyoku(); });
 
     // 本場追加
     $('#hon').click(function(){
@@ -256,6 +267,7 @@ $(function(){
     //--------------------------------
     // 点数精算(自動入力)ダイアログ
     $('.score').click(function(){
+        var next = true;
         var id;
         $.each(kaze, function(i, v){
             id = kaze_player(v);
@@ -298,6 +310,7 @@ $(function(){
 
             var winner = $(':checkbox[name|="w"]:checked').val();
             var loser = $(':checkbox[name|="p"]:checked').val();
+            if (winner == 'ton') { next = false; } // 親が上がると連荘
             if (tsumo) {
                 if (oya) {
                     $('#score').text('子 ' + score[0] + '点ALL');
@@ -390,7 +403,12 @@ $(function(){
                     clear_reach();
                     output_scores();
                     save_status();
-                    redraw_all();
+                    if (next) {
+                        change_kyoku();
+                    } else {
+                        $g.data('hon', $g.data('hon')+1);
+                        redraw_all();
+                    }
                     $(this).dialog('close');
                 },
             },
@@ -466,6 +484,7 @@ $(function(){
     //--------------------------------
     // 流局精算ダイアログ
     $(':button[name="ryukyoku"]').click(function(){
+        var next = true;
         $.each(kaze, function(i, v){
             var id = kaze_player(v);
             $(`.n-${v}r`).text($g.data(id).name);
@@ -497,6 +516,7 @@ $(function(){
                         var id = kaze_player(k);
                         if ($(`:checkbox[name="c-${k}r"]`).prop('checked')) {
                             tenpai.push(id);
+                            if (k == 'ton') { next = false; } // 親が聴牌なら連荘
                         } else {
                             noten.push(id);
                         }
@@ -527,7 +547,12 @@ $(function(){
                     clear_reach();
                     output_scores();
                     save_status();
-                    redraw_all();
+                    $g.data('hon', $g.data('hon')+1);
+                    if (next) {
+                        change_kyoku();
+                    } else {
+                        redraw_all();
+                    }
                     $(this).dialog('close');
                 },
             },
