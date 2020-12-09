@@ -613,7 +613,7 @@ $(function(){
                 return;
             }
             dice();
-            setTimeout(roll, 50);
+            setTimeout(roll, 80);
         };
 
         $('#diceroll').dialog({
@@ -622,7 +622,10 @@ $(function(){
             width: '200px',
             title: 'サイコロ',
             buttons: {
-                '振る': function(){ roll(); },
+                '振る': function(){
+                    $('#dicesound').get(0).play();
+                    roll();
+                },
                 '閉じる': function(){ $(this).dialog('close'); },
             },
         });

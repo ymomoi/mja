@@ -18,3 +18,7 @@
 - [jQuery Cookie](https://github.com/carhartl/jquery-cookie)
 - サイコロの画像と処理
     - [JavaScript：サイコロを振る](https://torisky.com/javascript%EF%BC%9A%E3%82%B5%E3%82%A4%E3%82%B3%E3%83%AD%E3%82%92%E6%8C%AF%E3%82%8B/)
+- サイコロを振る音
+    - [音人](https://on-jin.com/)
+- リーチ音声
+    - macOS の say コマンド
