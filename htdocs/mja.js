@@ -361,7 +361,7 @@ $(function(){
 
         $('#mjcalc').dialog({
             modal: true,
-            position: { my: 'left+5% top+5%', at: 'left+5% top+5%' },
+            position: { my: 'left+5% top+5%', at: 'left top' },
             width: '500px',
             title: '点棒受け渡し',
             buttons: {
@@ -433,7 +433,7 @@ $(function(){
 
         $('#calc').dialog({
             modal: true,
-            position: { my: 'left+5% top+5%', at: 'left+5% top+5%' },
+            position: { my: 'left+5% top+5%', at: 'left top' },
             width: '500px',
             title: '点棒受け渡し(マニュアル)',
             buttons: {
@@ -478,7 +478,7 @@ $(function(){
 
         $('#ryukyoku').dialog({
             modal: true,
-            position: { my: 'left+5% top+5%', at: 'left+5% top+5%' },
+            position: { my: 'left+5% top+5%', at: 'left top' },
             width: '500px',
             title: '流局精算',
             buttons: {
