@@ -144,8 +144,11 @@ body {
     left: 10px;
 }
 button {
-    font-size: 30px;
+    font-size: 25px;
 }
 #calc,#mjcalc,#ryukyoku {
     font-size: 20px;
+}
+.dialog {
+    font-size: 30px;
 }

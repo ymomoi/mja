@@ -203,7 +203,7 @@ $(function(){
     });
 
     // リーチ状態トグル
-    $('.kaze,.reach').click(function(){
+    $('.kaze,.reach,.player').click(function(){
         var id = $(this).parent().attr('id');
         var d = $g.data(id);
         if (d.reach) {
@@ -222,15 +222,15 @@ $(function(){
 
     //--------------------------------
     // プレイヤー情報入力ダイアログ
-    $('.player').click(function(){
+    $(':button[name="player_name"]').click(function(){
         $.each(player, function(i, v){
             $(`:input[name="${v}"]`).val($g.data(v).name);
         });
 
         $('#playerinfo').dialog({
             modal: true,
-            position: { my: 'left+10% top+10%', at: 'left+10% top+10%' },
-            width: '400px',
+            position: { my: 'left+5% top+5%', at: 'left top' },
+            width: '600px',
             title: 'プレイヤー情報入力',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
