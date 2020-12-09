@@ -89,6 +89,10 @@ $(function(){
         return kaze_str[$g.data('bakaze')];
     };
 
+    var rand_n = function(n){
+        return Math.floor(Math.random() * Number(n)) + 1;
+    };
+
     // 全描画
     var redraw_all = function(){
         $('#bakaze').text(bakaze());
@@ -215,6 +219,9 @@ $(function(){
             d.reach = true;
             d.score -= 1000;
             $g.data('kyotaku', $g.data('kyotaku')+1000);
+            var nn = rand_n(20);
+            nn = nn < 10 ? "0"+nn : nn;
+            $(`#reach-${nn}`).get(0).play();
         }
         $g.data(id, d);
         redraw_all();
@@ -566,12 +573,8 @@ $(function(){
     //--------------------------------
     // サイコロダイアログ
     $(':button[name="dice"]').click(function(){
-        var rand6 = function(){
-            return Math.floor(Math.random() * 6) + 1;
-        };
-
         var dice = function(){
-            var val = [ rand6(), rand6() ];
+            var val = [ rand_n(6), rand_n(6) ];
             $('#diceroll > .field').html(
                 '<img src="images/' + val[0] + '.png" />&nbsp;' +
                 '<img src="images/' + val[1] + '.png" />'
