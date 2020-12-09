@@ -404,6 +404,7 @@ $(function(){
                     output_scores();
                     save_status();
                     if (next) {
+                        $g.data('hon', 0);
                         change_kyoku();
                     } else {
                         $g.data('hon', $g.data('hon')+1);
