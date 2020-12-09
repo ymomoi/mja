@@ -382,7 +382,7 @@ $(function(){
         $('#mjcalc').dialog({
             modal: true,
             position: { my: 'left+5% top+5%', at: 'left top' },
-            width: '500px',
+            width: '700px',
             title: '点棒受け渡し',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
