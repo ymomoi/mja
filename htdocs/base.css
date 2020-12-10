@@ -149,3 +149,6 @@ button {
 .dialog {
     font-size: 30px;
 }
+.ui-dialog .ui-dialog-buttonpane {
+    font-size: 30px;
+}
