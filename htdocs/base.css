@@ -112,8 +112,8 @@ body {
 }
 .yakitori {
     position: absolute;
-    top: 3px;
-    right: 3px;
+    top: -6px;
+    right: -2px;
 }
 .player {
     font-size: 15px;
@@ -132,7 +132,7 @@ body {
     font-size: 40px;
     font-weight: bold;
     position: relative;
-    left: 50px;
+    left: 30px;
     color: red;
 }
 .score_diff {
