@@ -285,6 +285,7 @@ $(function(){
         });
         $(':checkbox[name|="w"]').prop('checked', false);
         $(':checkbox[name|="p"]').prop('checked', false);
+        $(':checkbox[name="preserve"]').prop('checked', false);
 
         id = $(this).parent().attr('id');
         switch ($(`#${id} > .kaze`).text()) {
@@ -414,12 +415,15 @@ $(function(){
                     clear_reach();
                     output_scores();
                     save_status();
-                    if (next) {
-                        $g.data('hon', 0);
-                        change_kyoku();
-                    } else {
-                        $g.data('hon', $g.data('hon')+1);
-                        redraw_all();
+                    // ダブロンなどの連続精算がなく、親以外の上がりなら局を進める
+                    if (! $(':checkbox[name="preserve"]').prop('checked')) {
+                        if (next) {
+                            $g.data('hon', 0);
+                            change_kyoku();
+                        } else {
+                            $g.data('hon', $g.data('hon')+1);
+                            redraw_all();
+                        }
                     }
                     $(this).dialog('close');
                 },
