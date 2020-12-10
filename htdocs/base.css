@@ -112,15 +112,15 @@ body {
 }
 .yakitori {
     position: absolute;
-    top: -35px;
-    left: 2px;
+    top: 3px;
+    right: 3px;
 }
 .player {
     font-size: 15px;
     font-weight: bold;
     position: absolute;
     top: -30px;
-    left: 55px;
+    left: 10px;
 }
 .kaze {
     font-size: 40px;
