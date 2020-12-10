@@ -110,12 +110,17 @@ body {
     top: 400px;
     left: 260px;
 }
+.yakitori {
+    position: absolute;
+    top: -35px;
+    left: 2px;
+}
 .player {
     font-size: 15px;
     font-weight: bold;
     position: absolute;
     top: -30px;
-    left: 10px;
+    left: 55px;
 }
 .kaze {
     font-size: 40px;
@@ -151,4 +156,7 @@ button {
 }
 .ui-dialog .ui-dialog-buttonpane {
     font-size: 30px;
+}
+.inactive {
+    display: none;
 }

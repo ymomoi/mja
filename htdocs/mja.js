@@ -14,7 +14,9 @@ $(function(){
         'kyotaku': 0,
     });
     $.each(player, function(i, v){
-        $g.data(v, { 'name': `${v}`, 'score': 25000, 'reach': false });
+        $g.data(v, {
+            'name': `${v}`, 'score': 25000,
+            'reach': false, 'agari': false, });
     });
 
     //--------------------------------
@@ -79,6 +81,13 @@ $(function(){
         $g.data(id, d);
     };
 
+    // 指定されたプレイヤーのあがり(焼き鳥)状態を変更する
+    var player_agari = function(id, v){
+        var d = $g.data(id);
+        d.agari = v;
+        $g.data(id, d);
+    };
+
     // 右ローテート
     Array.prototype.rot_r = function(n){
         return this.slice(n, this.length).concat(this.slice(0, n));
@@ -116,6 +125,12 @@ $(function(){
             $(`#${v} > .score`).text(s.shift());
             $(`#${v} > .score_diff`).text(diff.shift());
             $(`#${v} > .reach`).text($g.data(v).reach ? 'リーチ' : '');
+            if ($g.data(v).agari) {
+                $(`#${v} > .yakitori`).addClass('inactive');
+            } else {
+                $(`#${v} > .yakitori`).removeClass('inactive');
+            }
+
         });
     };
     redraw_all(); // 初回実行
@@ -167,14 +182,10 @@ $(function(){
             s[v] = {
                 'name': p.name,
                 'score': p.score,
+                'agari': p.agari,
             };
         });
         $.cookie('status', s);
-    };
-
-    // cookieから場とプレイヤー情報を取得
-    var load_status = function(){
-        return $.cookie('status');
     };
 
     // 場風を切り替える
@@ -218,7 +229,7 @@ $(function(){
     });
 
     // リーチ状態トグル
-    $('.kaze,.reach,.player,.score_diff').click(function(){
+    $('.kaze,.reach,.player,.score_diff,.yakitori').click(function(){
         var id = $(this).parent().attr('id');
         var d = $g.data(id);
         if (d.reach) {
@@ -267,8 +278,7 @@ $(function(){
     //--------------------------------
     // 点数精算(自動入力)ダイアログ
     $('.score').click(function(){
-        var next = true;
-        var id;
+        var id, winner, loser, next;
         $.each(kaze, function(i, v){
             id = kaze_player(v);
             $(`.n-${v}`).text($g.data(id).name);
@@ -308,9 +318,9 @@ $(function(){
             var tsumo = $(':checkbox[name|="p"]:checked').length == 3 ? true : false;
             var score = calc_score(han, fu, oya, tsumo);
 
-            var winner = $(':checkbox[name|="w"]:checked').val();
-            var loser = $(':checkbox[name|="p"]:checked').val();
-            if (winner == 'ton') { next = false; } // 親が上がると連荘
+            winner = $(':checkbox[name|="w"]:checked').val();
+            loser = $(':checkbox[name|="p"]:checked').val();
+            next = (winner == 'ton') ? false : true; // 親が上がると連荘
             if (tsumo) {
                 if (oya) {
                     $('#score').text('子 ' + score[0] + '点ALL');
@@ -398,6 +408,7 @@ $(function(){
                         var s = Number($(`:input[name="s-${v}"]`).val());
                         player_score(id, s);
                     });
+                    player_agari(kaze_player(winner), true);
                     $g.data('kyotaku', 0);
                     clear_scores();
                     clear_reach();
@@ -578,7 +589,7 @@ $(function(){
                     $g.data('hon', st.hon);
                     $g.data('kyotaku', st.kyotaku);
                     $.each(player, function(i, v){
-                        $g.data(v, { 'name': st[v].name, 'score': st[v].score, 'reach': false });
+                        $g.data(v, { 'name': st[v].name, 'score': st[v].score, 'reach': false, 'agari': st[v].agari });
                     });
                     output_scores();
                     redraw_all();
