@@ -629,8 +629,8 @@ $(function(){
 
         $('#diceroll').dialog({
             modal: true,
-            position: { my: 'left+10% top+10%', at: 'left+10% top+10%' },
-            width: '200px',
+            position: { my: 'left+10% top+10%', at: 'left top' },
+            width: '400px',
             title: 'サイコロ',
             buttons: {
                 '振る': function(){
