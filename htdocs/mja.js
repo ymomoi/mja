@@ -1,23 +1,20 @@
 $(function(){
     //--------------------------------
     // グローバル設定
-    $.cookie.json = true;
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     const kaze_str = [ '東', '南', '西', '北' ];
     const jikaze_str = [ '東(親)', '南', '西', '北' ];
-    var $g = $('body');
-    $g.data({
-        'bakaze': 0,
-        'kyoku': 1,
-        'hon': 0,
-        'kyotaku': 0,
-    });
+    $.lsset('bakaze', 0);
+    $.lsset('kyoku', 1);
+    $.lsset('hon', 0);
+    $.lsset('kyotaku', 0);
     $.each(player, function(i, v){
-        $g.data(v, {
-            'name': `${v}`, 'score': 25000,
-            'reach': false, 'agari': false, });
+        $.lsset(v, { 'name': v, 'score': 25000, 'reach': false, 'agari': false });
     });
+    if (!Array.isArray($.lsget('history'))) {
+        $.lsset('history', []);
+    }
 
     //--------------------------------
     // 親/子の点数を返す
@@ -54,38 +51,34 @@ $(function(){
     // 現在の局でそれぞれの風のプレイヤーを返す
     var kaze_player = function(k){
         var index = [ 0, 1, 2, 3 ];
-        index = index.rot_r($g.data('kyoku')-1);
+        index = index.rot_r($.lsget('kyoku')-1);
         switch (k) {
-            case 'ton':
-                return player[index[0]];
-            case 'nan':
-                return player[index[1]];
-            case 'sha':
-                return player[index[2]];
-            default:
-                return player[index[3]];
+            case 'ton': return player[index[0]];
+            case 'nan': return player[index[1]];
+            case 'sha': return player[index[2]];
+            default:    return player[index[3]];
         }
     };
 
     // 指定されたプレイヤーの点棒を操作する
     var player_score = function(id, v){
-        var d = $g.data(id);
+        var d = $.lsget(id);
         d.score += v;
-        $g.data(id, d);
+        $.lsset(id, d);
     };
 
     // 指定されたプレイヤー名を設定する
     var player_name = function(id, v){
-        var d = $g.data(id);
+        var d = $.lsget(id);
         d.name = v;
-        $g.data(id, d);
+        $.lsset(id, d);
     };
 
     // 指定されたプレイヤーのあがり(焼き鳥)状態を変更する
     var player_agari = function(id, v){
-        var d = $g.data(id);
+        var d = $.lsget(id);
         d.agari = v;
-        $g.data(id, d);
+        $.lsset(id, d);
     };
 
     // 右ローテート
@@ -95,7 +88,7 @@ $(function(){
 
     // 場風
     var bakaze = function() {
-        return kaze_str[$g.data('bakaze')];
+        return kaze_str[$.lsget('bakaze')];
     };
 
     var rand_n = function(n){
@@ -105,14 +98,14 @@ $(function(){
     // 全描画
     var redraw_all = function(){
         $('#bakaze').text(bakaze());
-        $('#kyoku > .val').text($g.data('kyoku'));
-        $('#hon > .val').text($g.data('hon'));
-        $('#kyotaku > .val').text($g.data('kyotaku'));
+        $('#kyoku > .val').text($.lsget('kyoku'));
+        $('#hon > .val').text($.lsget('hon'));
+        $('#kyotaku > .val').text($.lsget('kyotaku'));
 
         var jikaze = jikaze_str;
-        jikaze = jikaze.rot_r(1-$g.data('kyoku'));
+        jikaze = jikaze.rot_r(1-$.lsget('kyoku'));
         var s = [];
-        $.each(player, function(i, v){ s.push($g.data(v).score); });
+        $.each(player, function(i, v){ s.push($.lsget(v).score); });
         var diff = [
             String(s[3]-s[0]) + '/' + String(s[2]-s[0]) + '/' + String(s[1]-s[0]),
             String(s[0]-s[1]) + '/' + String(s[3]-s[1]) + '/' + String(s[2]-s[1]),
@@ -120,12 +113,12 @@ $(function(){
             String(s[2]-s[3]) + '/' + String(s[1]-s[3]) + '/' + String(s[0]-s[3]),
         ];
         $.each(player, function(i, v){
-            $(`#${v} > .player`).text($g.data(v).name);
+            $(`#${v} > .player`).text($.lsget(v).name);
             $(`#${v} > .kaze`).text(jikaze.shift());
             $(`#${v} > .score`).text(s.shift());
             $(`#${v} > .score_diff`).text(diff.shift());
-            $(`#${v} > .reach`).text($g.data(v).reach ? 'リーチ' : '');
-            if ($g.data(v).agari) {
+            $(`#${v} > .reach`).text($.lsget(v).reach ? 'リーチ' : '');
+            if ($.lsget(v).agari) {
                 $(`#${v} > .yakitori`).addClass('inactive');
             } else {
                 $(`#${v} > .yakitori`).removeClass('inactive');
@@ -138,70 +131,82 @@ $(function(){
     // リーチ状態をクリア
     var clear_reach = function(){
         $.each(player, function(i, v){
-            var d = $g.data(v);
+            var d = $.lsget(v);
             d.reach = false;
-            $g.data(v, d);
+            $.lsset(v, d);
         });
     };
 
-    // ログを出力
-    var log_output = function(str){
+    // 現在時刻文字列
+    var now_timestr = function(){
 		var n = new Date();
 		var hh = n.getHours();
 		var mm = n.getMinutes();
 		var ss = n.getSeconds();
-		hh = hh < 10 ? "0"+hh : hh;
-		mm = mm < 10 ? "0"+mm : mm;
-        ss = ss < 10 ? "0"+ss : ss;
+		hh = hh < 10 ? '0'+hh : hh;
+		mm = mm < 10 ? '0'+mm : mm;
+        ss = ss < 10 ? '0'+ss : ss;
+        return hh + ':' + mm + ':' + ss;
+    };
+
+    // ログを出力
+    var log_output = function(str){
         var t = $('#log').html();
-        $('#log').html(t + hh+':'+mm+':'+ss + ' ' + str + "\n");
+        $('#log').html(t + now_timestr() + ' ' + str + "\n");
+    };
+
+    // プレイヤー名と点棒状況の文字列を作成する
+    var player_status = function(){
+        var str = '';
+        $.each(player, function(i, v){
+            var p = $.lsget(v);
+            str += v + ' ' + p.name + ' ' + p.score + '点, ';
+        });
+        return str;
     };
 
     // 点数状況を出力
     var output_scores = function(){
-        var str = bakaze() + $g.data('kyoku') + '局 ' +
-            $g.data('hon') + '本場: ' + "<br />\n";
-        $.each(player, function(i, v){
-            var p = $g.data(v);
-            str += v + ' ' + p.name + ' ' + p.score + '点, ';
-        });
-        str += '(供託 ' + $g.data('kyotaku') + '点)<br />';
+        var str = bakaze() + $.lsget('kyoku') + '局 ' +
+            $.lsget('hon') + '本場: ' + "<br />\n";
+        str += player_status();
+        str += '(供託 ' + $.lsget('kyotaku') + '点)<br />';
         log_output(str);
     };
 
-    // 場とプレイヤー情報をcookieに保存
+    // 場とプレイヤー情報をhistoryに保存
     var save_status = function(){
         var s = {
-            'bakaze': $g.data('bakaze'),
-            'kyoku': $g.data('kyoku'),
-            'hon': $g.data('hon'),
-            'kyotaku': $g.data('kyotaku'),
+            'label': now_timestr() + ' ' + bakaze() + $.lsget('kyoku') + '局' +
+                $.lsget('hon') + '本場',
+            'bakaze': $.lsget('bakaze'), 'kyoku': $.lsget('kyoku'),
+            'hon': $.lsget('hon'), 'kyotaku': $.lsget('kyotaku'),
         };
         $.each(player, function(i, v){
-            var p = $g.data(v);
-            s[v] = {
-                'name': p.name,
-                'score': p.score,
-                'agari': p.agari,
-            };
+            var p = $.lsget(v);
+            s[v] = { 'name': p.name, 'score': p.score, 'agari': p.agari };
         });
-        $.cookie('status', s);
+        // historyは直近の30件を保存
+        var h = $.lsget('history');
+        if (h.length >= 30) { h.pop(); }
+        h.unshift(s);
+        $.lsset('history', h);
     };
 
     // 場風を切り替える
     var change_bakaze = function(){
-        $g.data('bakaze', ($g.data('bakaze') + 1) % 4);
+        $.lsset('bakaze', ($.lsget('bakaze') + 1) % 4);
         clear_reach();
         redraw_all();
     };
 
     // 次の局へ進む
     var change_kyoku = function(){
-        var k = $g.data('kyoku') + 1;
+        var k = $.lsget('kyoku') + 1;
         if (k > 4) { k = 1; }
-        $g.data('kyoku', k);
-        if ($g.data('kyoku') == 1) {
-            change_bakaze();
+        $.lsset('kyoku', k);
+        if (k == 1) {
+            change_bakaze(); // 関数内で clear_reach & redraw_all している
         }
         else {
             clear_reach();
@@ -218,12 +223,7 @@ $(function(){
 
     // 本場追加
     $('#hon').click(function(){
-        $g.data('hon', $g.data('hon') + 1);
-        clear_reach();
-        redraw_all();
-    });
-    $('#hon').dblclick(function(){
-        $g.data('hon', 0);
+        $.lsset('hon', $.lsget('hon') + 1);
         clear_reach();
         redraw_all();
     });
@@ -231,21 +231,21 @@ $(function(){
     // リーチ状態トグル
     $('.kaze,.reach,.player,.score_diff,.yakitori').click(function(){
         var id = $(this).parent().attr('id');
-        var d = $g.data(id);
+        var d = $.lsget(id);
         if (d.reach) {
             d.reach = false;
             d.score += 1000;
-            $g.data('kyotaku', $g.data('kyotaku')-1000);
+            $.lsset('kyotaku', $.lsget('kyotaku')-1000);
         }
         else {
             d.reach = true;
             d.score -= 1000;
-            $g.data('kyotaku', $g.data('kyotaku')+1000);
+            $.lsset('kyotaku', $.lsget('kyotaku')+1000);
             var nn = rand_n(20);
             nn = nn < 10 ? "0"+nn : nn;
             $(`#reach-${nn}`).get(0).play();
         }
-        $g.data(id, d);
+        $.lsset(id, d);
         redraw_all();
     });
 
@@ -253,7 +253,7 @@ $(function(){
     // プレイヤー情報入力ダイアログ
     $(':button[name="player_name"]').click(function(){
         $.each(player, function(i, v){
-            $(`:input[name="${v}"]`).val($g.data(v).name);
+            $(`:input[name="${v}"]`).val($.lsget(v).name);
         });
 
         $('#playerinfo').dialog({
@@ -281,7 +281,7 @@ $(function(){
         var id, winner, loser, next;
         $.each(kaze, function(i, v){
             id = kaze_player(v);
-            $(`.n-${v}`).text($g.data(id).name);
+            $(`.n-${v}`).text($.lsget(id).name);
         });
         $(':checkbox[name|="w"]').prop('checked', false);
         $(':checkbox[name|="p"]').prop('checked', false);
@@ -299,8 +299,8 @@ $(function(){
                 $(':checkbox[name="w-ton"]').prop('checked', true); break;
         }
 
-        var hon = $g.data('hon');
-        var kyotaku = $g.data('kyotaku');
+        var hon = $.lsget('hon');
+        var kyotaku = $.lsget('kyotaku');
         $('#mjcalc > .ba').text(
             hon + '本場 (' + hon*300 + '点 + 供託' + kyotaku + '点)'
         );
@@ -310,6 +310,7 @@ $(function(){
             $('#score').text('');
         };
 
+        // input[name="s-***"] に計算結果を設定することで、その値を元に精算する
         var update_scores = function(){
             clear_scores();
             if (check_inputs() != true) { return; }
@@ -403,13 +404,15 @@ $(function(){
                         return;
                     }
                     update_scores();
+                    // FORM の値を元に精算
                     $.each(kaze, function(i, v){
                         var id = kaze_player(v);
                         var s = Number($(`:input[name="s-${v}"]`).val());
                         player_score(id, s);
                     });
+                    // 次局への処理
                     player_agari(kaze_player(winner), true);
-                    $g.data('kyotaku', 0);
+                    $.lsset('kyotaku', 0);
                     clear_scores();
                     clear_reach();
                     output_scores();
@@ -417,10 +420,10 @@ $(function(){
                     // ダブロンなどの連続精算がなく、親以外の上がりなら局を進める
                     if (! $(':checkbox[name="preserve"]').prop('checked')) {
                         if (next) {
-                            $g.data('hon', 0);
+                            $.lsset('hon', 0);
                             change_kyoku();
                         } else {
-                            $g.data('hon', $g.data('hon')+1);
+                            $.lsset('hon', $.lsget('hon')+1);
                             redraw_all();
                         }
                     }
@@ -435,8 +438,8 @@ $(function(){
     $(':button[name="score_manual"]').click(function(){
         $.each(kaze, function(i, v){
             var id = kaze_player(v);
-            $(`.s-${v}`).text($g.data(id).score);
-            $(`.n-${v}`).text($g.data(id).name);
+            $(`.s-${v}`).text($.lsget(id).score);
+            $(`.n-${v}`).text($.lsget(id).name);
         });
 
         var calc_diff = function(){
@@ -461,7 +464,7 @@ $(function(){
                 var n = $(this).attr('name');
                 var o;
                 if (n == 'kyotaku') {
-                    $g.data('kyotaku', $g.data('kyotaku') + v);
+                    $.lsset('kyotaku', $.lsget('kyotaku') + v);
                 }
                 else {
                     var id = kaze_player(n);
@@ -501,17 +504,15 @@ $(function(){
         var next = true;
         $.each(kaze, function(i, v){
             var id = kaze_player(v);
-            $(`.n-${v}r`).text($g.data(id).name);
+            $(`.n-${v}r`).text($.lsget(id).name);
         });
 
-        $(':checkbox').each(function(){
-            $(this).prop('checked', false);
-        });
+        $(':checkbox').each(function(){ $(this).prop('checked', false); });
 
         $.each(kaze, function(i, k){
             var id = kaze_player(k);
             // リーチしていたプレイヤーを自動チェック
-            if ($g.data(id).reach) {
+            if ($.lsget(id).reach) {
                 $(`:checkbox[name="c-${k}r"]`).prop('checked', true);
             }
         });
@@ -561,7 +562,7 @@ $(function(){
                     clear_reach();
                     output_scores();
                     save_status();
-                    $g.data('hon', $g.data('hon')+1);
+                    $.lsset('hon', $.lsget('hon')+1);
                     if (next) {
                         change_kyoku();
                     } else {
@@ -574,25 +575,42 @@ $(function(){
     });
 
     //--------------------------------
-    // リストア: クッキーに保存されたステータスを読み込む
+    // リストア: history に保存したステータスを読み込む
     $(':button[name="load_status"]').click(function(){
-        $('#load_status').text(JSON.stringify($.cookie('status')));
+        $('#load_status > select').html('');
+        var history = $.lsget('history');
+        $.each(history, function(i, v){
+            $('#load_status > select').append($('<option>').val(i).text(v.label));
+        });
+
+        $('#load_status > select').change(function(){
+            var i = $(this).val();
+            var st = history[i];
+            var str = '';
+            $.each(player, function(j, v){
+                str += v + ' ' + st[v].name + ' ' + st[v].score + '点<br />';
+            });
+            str += '(供託 ' + st.kyotaku + '点)';
+            $('#load_status > div').html(str);
+        });
+        $('#load_status > select').change(); // 初期表示を作成
 
         $('#load_status').dialog({
             modal: true,
-            position: { my: 'left+10% top+10%', at: 'left+10% top+10%' },
+            position: { my: 'left+10% top+10%', at: 'left top' },
             width: '400px',
-            title: '前局終了時のステータスをリストア',
+            title: '局終了時のステータスをリストア',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
                 'リストア': function(){
-                    var st = $.cookie('status');
-                    $g.data('bakaze', st.bakaze);
-                    $g.data('kyoku', st.kyoku);
-                    $g.data('hon', st.hon);
-                    $g.data('kyotaku', st.kyotaku);
+                    var i = $('#load_status option:selected').val();
+                    var st = history[i];
+                    $.lsset('bakaze', st.bakaze);
+                    $.lsset('kyoku', st.kyoku);
+                    $.lsset('hon', st.hon);
+                    $.lsset('kyotaku', st.kyotaku);
                     $.each(player, function(i, v){
-                        $g.data(v, { 'name': st[v].name, 'score': st[v].score, 'reach': false, 'agari': st[v].agari });
+                        $.lsset(v, { 'name': st[v].name, 'score': st[v].score, 'reach': false, 'agari': st[v].agari });
                     });
                     output_scores();
                     redraw_all();
@@ -605,7 +623,7 @@ $(function(){
     //--------------------------------
     // 本場リセットボタン
     $(':button[name="hon_clear"]').click(function(){
-        $g.data('hon', 0);
+        $.lsset('hon', 0);
         redraw_all();
     });
 
@@ -622,10 +640,7 @@ $(function(){
 
         var count = 0;
         var roll = function(){
-            if (++count > 20) {
-                count = 0;
-                return;
-            }
+            if (++count > 20) { count = 0; return; }
             dice();
             setTimeout(roll, 80);
         };
