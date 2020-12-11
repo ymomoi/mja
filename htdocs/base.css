@@ -82,6 +82,9 @@ body {
     margin: 20px;
     font-size: 10pt;
 }
+#diceroll {
+    text-align: center;
+}
 #bakaze {
     font-size: 160px;
     font-weight: bold;
