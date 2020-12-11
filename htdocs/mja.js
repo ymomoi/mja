@@ -397,7 +397,6 @@ $(function(){
             title: '点棒受け渡し',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
-                '表示更新': function(){},
                 '支払実行': function(){
                     if (check_inputs() != true) {
                         alert('入力値が不正です。確認してください。');
