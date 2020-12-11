@@ -72,11 +72,17 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 
 ![screenshot1](images/sc-01.jpg)
 
-![screenshot4](images/sc-04.jpg)
+![screenshot2](images/sc-02.png)
+
+![screenshot4](images/sc-04.png)
 
 ![screenshot3](images/sc-03.jpg)
 
-![screenshot2](images/sc-02.png)
+![screenshot5](images/sc-05.png)
+
+![screenshot6](images/sc-06.png)
+
+![screenshot7](images/sc-07.png)
 
 ## 使用したもの
 
