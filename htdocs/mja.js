@@ -1,6 +1,7 @@
 $(function(){
     //--------------------------------
     // グローバル設定
+    $.lsset('4mangan', false);
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     const kaze_str = [ '東', '南', '西', '北' ];
@@ -22,6 +23,9 @@ $(function(){
         return Math.ceil(n/100) * 100;
     };
     var calc_score = function(han, fu, oya, tsumo){
+        if ($.lsget('4mangan')) {
+            if (fu == 30 && han == 4) { han = 5; }
+        }
         if (oya) {
             if (han >= 13) { return tsumo ? [ 16000 ] : [ 48000 ]; }
             if (han >= 11) { return tsumo ? [ 12000 ] : [ 36000 ]; }
@@ -656,6 +660,28 @@ $(function(){
                     roll();
                 },
                 '閉じる': function(){ $(this).dialog('close'); },
+            },
+        });
+    });
+
+    //--------------------------------
+    // 全体設定ダイアログ
+    $(':button[name="settings"]').click(function(){
+        $('#settings').dialog({
+            modal: true,
+            position: { my: 'left+5% top+5%', at: 'left top' },
+            width: '500px',
+            title: '全体設定',
+            buttons: {
+                'キャンセル': function(){ $(this).dialog('close'); },
+                '更新': function(){
+                    if ($(':checkbox[name="4mangan"]:checked').length == 1) {
+                        $.lsset('4mangan', true);
+                    } else {
+                        $.lsset('4mangan', false);
+                    }
+                    $(this).dialog('close');
+                },
             },
         });
     });

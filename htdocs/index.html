@@ -57,6 +57,7 @@
                 <button type="button" name="player_name">メンバー</button>
             </div>
             <div id="dice">
+                <button type="button" name="settings"><span class="ui-icon ui-icon-gear"></span></button><br /><br /><br /><br />
                 <button type="button" name="dice">サイコロ</button>
             </div>
             <div id="ba">
@@ -168,6 +169,14 @@
                 <li>p4 名前: <input name="p4" type="text" /></li>
             </ul>
         </div>
+
+        <div id="settings" class="dialog" style="display: none;">
+            全体設定
+            <ul>
+                <li><label>30符4翻 満貫切り上げ <input type="checkbox" name="4mangan" /></label></li>
+            </ul>
+        </div>
+
 
         <script src="clock.js"></script>
         <script src="ls.js"></script>
