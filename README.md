@@ -6,6 +6,10 @@
 
 ## 使い方
 
+iPad mini など、適当なサイズのタブレットに表示して使うことを想定しています。
+
+![play](images/play.jpg)
+
 HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカルの適当な場所に置いて、Webブラウザでhtdocs/index.htmlを読み込めば動作します。
 
 こちらで触ってみることができます: [動作デモ](http://bug.org/~momo/mja/)
