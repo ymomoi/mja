@@ -27,6 +27,7 @@ $(function(){
             if (fu == 30 && han == 4) { han = 5; }
         }
         if (oya) {
+            if (han >= 15) { return tsumo ? [ 32000 ] : [ 96000 ]; }
             if (han >= 13) { return tsumo ? [ 16000 ] : [ 48000 ]; }
             if (han >= 11) { return tsumo ? [ 12000 ] : [ 36000 ]; }
             if (han >= 8) { return tsumo ? [ 8000 ] : [ 24000 ]; }
@@ -38,6 +39,7 @@ $(function(){
                 return [ Math.min(round100(Number(fu) * 12*2 * 2**Number(han)), 12000) ];
             }
         } else {
+            if (han >= 15) { return tsumo ? [ 16000, 32000 ] : [ 64000 ]; }
             if (han >= 13) { return tsumo ? [ 8000, 16000 ] : [ 32000 ]; }
             if (han >= 11) { return tsumo ? [ 6000, 12000 ] : [ 24000 ]; }
             if (han >= 8) { return tsumo ? [ 4000, 8000 ] : [ 16000 ]; }
