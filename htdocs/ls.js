@@ -11,7 +11,10 @@
             return JSON.parse(s);
         },
         lsrm: function(k){
-            window.localStorage.removeItem(key(k));
+            return window.localStorage.removeItem(key(k));
+        },
+        lshaskey: function(k){
+            return window.localStorage.hasOwnProperty(key(k));
         },
     });
 })(jQuery);

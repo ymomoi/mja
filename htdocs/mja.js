@@ -1,7 +1,12 @@
 $(function(){
     //--------------------------------
     // グローバル設定
-    $.lsset('4mangan', false);
+    if (!$.lshaskey('genten'))  { $.lsset('genten', 25000);  }
+    if (!$.lshaskey('4mangan')) { $.lsset('4mangan', false); }
+    if (!$.lshaskey('1500hon')) { $.lsset('1500hon', false); }
+    if (!$.lshaskey('agaren'))  { $.lsset('agaren', false);  }
+    if (!$.lshaskey('autooff')) { $.lsset('autooff', false); }
+
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     const kaze_str = [ '東', '南', '西', '北' ];
@@ -11,7 +16,7 @@ $(function(){
     $.lsset('hon', 0);
     $.lsset('kyotaku', 0);
     $.each(player, function(i, v){
-        $.lsset(v, { 'name': v, 'score': 25000, 'reach': false, 'agari': false });
+        $.lsset(v, { 'name': v, 'score': Number($.lsget('genten')), 'reach': false, 'agari': false });
     });
     if (!Array.isArray($.lsget('history'))) {
         $.lsset('history', []);
@@ -306,9 +311,10 @@ $(function(){
         }
 
         var hon = $.lsget('hon');
+        var hon_score = $.lsget('1500hon') ? 1500 : 300;
         var kyotaku = $.lsget('kyotaku');
         $('#mjcalc > .ba').text(
-            hon + '本場 (' + hon*300 + '点 + 供託' + kyotaku + '点)'
+            hon + '本場 (' + hon*hon_score + '点 + 供託' + kyotaku + '点)'
         );
 
         var clear_scores = function(){
@@ -332,7 +338,7 @@ $(function(){
             if (tsumo) {
                 if (oya) {
                     $('#score').text('子 ' + score[0] + '点ALL');
-                    score[0] += 100*hon;
+                    score[0] += hon * (hon_score/3);
                     $(`:input[name="s-ton"]`).val(score[0]*3 + kyotaku);
                     $(`:input[name="s-nan"]`).val(-score[0]);
                     $(`:input[name="s-sha"]`).val(-score[0]);
@@ -340,8 +346,8 @@ $(function(){
                 }
                 else {
                     $('#score').text('親 ' + score[1] + '点、子 ' + score[0] + '点');
-                    score[0] += 100*hon;
-                    score[1] += 100*hon;
+                    score[0] += hon * (hon_score/3);
+                    score[1] += hon * (hon_score/3);
                     $(`:input[name="s-ton"]`).val(-score[1]);
                     $(`:input[name="s-nan"]`).val(-score[0]);
                     $(`:input[name="s-sha"]`).val(-score[0]);
@@ -352,7 +358,7 @@ $(function(){
             }
             else {
                 $('#score').text(score[0] + '点');
-                score[0] += 300*hon;
+                score[0] += hon * hon_score;
                 $(`:input[name="s-${winner}"]`).val(score[0]+kyotaku);
                 $(`:input[name="s-${loser}"]`).val(-score[0]);
             }
@@ -424,7 +430,7 @@ $(function(){
                     output_scores();
                     save_status();
                     // ダブロンなどの連続精算がなく、親以外の上がりなら局を進める
-                    if (! $(':checkbox[name="preserve"]').prop('checked')) {
+                    if ($.lsget('autooff') == false && ! $(':checkbox[name="preserve"]').prop('checked')) {
                         if (next) {
                             $.lsset('hon', 0);
                             change_kyoku();
@@ -537,7 +543,9 @@ $(function(){
                         var id = kaze_player(k);
                         if ($(`:checkbox[name="c-${k}r"]`).prop('checked')) {
                             tenpai.push(id);
-                            if (k == 'ton') { next = false; } // 親が聴牌なら連荘
+                            if ($.lsget('agaren') == false && k == 'ton') {
+                                next = false; // 親が聴牌なら連荘
+                            }
                         } else {
                             noten.push(id);
                         }
@@ -568,12 +576,11 @@ $(function(){
                     clear_reach();
                     output_scores();
                     save_status();
-                    $.lsset('hon', $.lsget('hon')+1);
-                    if (next) {
-                        change_kyoku();
-                    } else {
-                        redraw_all();
+                    if ($.lsget('autooff') == false) {
+                        $.lsset('hon', $.lsget('hon')+1);
+                        if (next) { change_kyoku(); }
                     }
+                    redraw_all();
                     $(this).dialog('close');
                 },
             },
@@ -669,6 +676,12 @@ $(function(){
     //--------------------------------
     // 全体設定ダイアログ
     $(':button[name="settings"]').click(function(){
+        const skeys = [ '4mangan', '1500hon', 'agaren', 'autooff' ];
+        $.each(skeys, function(i, k){
+            $(`:checkbox[name="${k}"]`).prop('checked', $.lsget(k));
+        });
+        $(`:input[name="genten"]`).val($.lsget('genten'));
+
         $('#settings').dialog({
             modal: true,
             position: { my: 'left+5% top+5%', at: 'left top' },
@@ -677,11 +690,14 @@ $(function(){
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
                 '更新': function(){
-                    if ($(':checkbox[name="4mangan"]:checked').length == 1) {
-                        $.lsset('4mangan', true);
-                    } else {
-                        $.lsset('4mangan', false);
-                    }
+                    $.each(skeys, function(i, k){
+                        if ($(`:checkbox[name="${k}"]:checked`).length == 1) {
+                            $.lsset(k, true);
+                        } else {
+                            $.lsset(k, false);
+                        }
+                    });
+                    $.lsset('genten', $(`:input[name="genten"]`).val());
                     $(this).dialog('close');
                 },
             },
