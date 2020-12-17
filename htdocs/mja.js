@@ -11,13 +11,19 @@ $(function(){
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     const kaze_str = [ '東', '南', '西', '北' ];
     const jikaze_str = [ '東(親)', '南', '西', '北' ];
-    $.lsset('bakaze', 0);
-    $.lsset('kyoku', 1);
-    $.lsset('hon', 0);
-    $.lsset('kyotaku', 0);
-    $.each(player, function(i, v){
-        $.lsset(v, { 'name': v, 'score': Number($.lsget('genten')), 'reach': false, 'agari': false });
-    });
+    var init_all = function(){
+        $.lsset('bakaze', 0);
+        $.lsset('kyoku', 1);
+        $.lsset('hon', 0);
+        $.lsset('kyotaku', 0);
+        $.each(player, function(i, v){
+            var p = { 'name': v, 'score': Number($.lsget('genten')), 'reach': false, 'agari': false };
+            var org = $.lsget(v);
+            if (org.name) { p.name = org.name; }
+            $.lsset(v, p);
+        });
+    };
+    init_all();
     if (!Array.isArray($.lsget('history'))) {
         $.lsset('history', []);
     }
@@ -262,6 +268,7 @@ $(function(){
 
     //--------------------------------
     // プレイヤー情報入力ダイアログ
+    $('#playerinfo > .sortable').sortable();
     $(':button[name="player_name"]').click(function(){
         $.each(player, function(i, v){
             $(`:input[name="${v}"]`).val($.lsget(v).name);
@@ -275,9 +282,11 @@ $(function(){
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
                 '更新': function(){
-                    $.each(player, function(i, v){
-                        var n = $(`:input[name="${v}"]`).val();
-                        player_name(v, n);
+                    // form の順番に p1〜p4 に設定する
+                    var i = 1;
+                    $('#playerinfo :input').each(function(){
+                        player_name(`p${i}`, $(this).val());
+                        i++;
                     });
                     redraw_all();
                     $(this).dialog('close');
@@ -638,6 +647,25 @@ $(function(){
     $(':button[name="hon_clear"]').click(function(){
         $.lsset('hon', 0);
         redraw_all();
+    });
+
+    //--------------------------------
+    // 初期化ボタン
+    $(':button[name="all_clear"]').click(function(){
+        $('#all_clear').dialog({
+            modal: true,
+            position: { my: 'left+10% top+10%', at: 'left top' },
+            width: '550px',
+            title: '点数初期化',
+            buttons: {
+                'キャンセル': function(){ $(this).dialog('close'); },
+                '点数初期化': function(){
+                    init_all();
+                    redraw_all();
+                    $(this).dialog('close');
+                },
+            },
+        });
     });
 
     //--------------------------------

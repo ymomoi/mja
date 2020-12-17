@@ -73,7 +73,9 @@
             </div>
             <div id="nav-r">
                 <button type="button" name="hon_clear">0本場</button>
-                <br /><br /><br />
+                <br /><br />
+                <button type="button" name="all_clear">初期化</button>
+                <br /><br />
                 <button type="button" name="load_status">リストア</button>
             </div>
             <div id="log">
@@ -162,13 +164,16 @@
             <div></div>
         </div>
 
+        <div id="all_clear" class="dialog" style="display: none;">
+        </div>
+
         <div id="playerinfo" class="dialog" style="display: none;">
-            <ul>
-                <li>p1 名前: <input name="p1" type="text" /></li>
-                <li>p2 名前: <input name="p2" type="text" /></li>
-                <li>p3 名前: <input name="p3" type="text" /></li>
-                <li>p4 名前: <input name="p4" type="text" /></li>
-            </ul>
+            <ol class="sortable">
+                <li>名前: <input name="p1" type="text" /> <span class="ui-icon ui-icon-grip-dotted-horizontal"></span></li>
+                <li>名前: <input name="p2" type="text" /> <span class="ui-icon ui-icon-grip-dotted-horizontal"></span></li>
+                <li>名前: <input name="p3" type="text" /> <span class="ui-icon ui-icon-grip-dotted-horizontal"></span></li>
+                <li>名前: <input name="p4" type="text" /> <span class="ui-icon ui-icon-grip-dotted-horizontal"></span></li>
+            </ol>
         </div>
 
         <div id="settings" class="dialog" style="display: none;">
