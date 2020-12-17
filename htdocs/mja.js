@@ -306,6 +306,7 @@ $(function(){
         $(':checkbox[name|="w"]').prop('checked', false);
         $(':checkbox[name|="p"]').prop('checked', false);
         $(':checkbox[name="preserve"]').prop('checked', false);
+        $(':checkbox[name="tsumo"]').prop('checked', false);
 
         id = $(this).parent().attr('id');
         switch ($(`#${id} > .kaze`).text()) {
