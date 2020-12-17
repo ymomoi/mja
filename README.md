@@ -31,6 +31,7 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 
 - メンバー設定ボタン
     - p1〜p4に、起家から順番にプレイヤー名を入力しておくと、精算画面などが見やすいです
+    - ドラッグアンドドロップで順番を入れ替えられます
 - サイコロボタン
     - サイコロを2個振ります
 - 自風、焼き鳥(焼き豚)、点差表示
@@ -41,7 +42,7 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
     - タップすると、タップした人のあがりとして精算ダイアログが開きます
 - 点数精算ダイアログ
     - 翻数と符を入力、あがったプレイヤー、放銃したプレイヤーを指定します
-    - ツモあがりの場合は他3人を指定します
+    - 自摸あがりの場合は他3人を指定します
     - 供託、本場が自動計算され、親以外があがった場合は次の局に進みます
     - ダブロン、トリロン時の操作は後述します
 - 流局精算ダイアログ
@@ -54,6 +55,8 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 
 - 0本場ボタン
     - 本場をクリアしたいときに押します
+- 初期化ボタン
+    - 局、点数状況をすべてクリアしたいときに押します
 - 手動精算ボタン
     - 点数をプレイヤーと供託間でやりとりします
 - 場風表示
@@ -97,10 +100,15 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 
 ![screenshot7](images/sc-07.png)
 
+![screenshot8](images/sc-08.png)
+
+![screenshot9](images/sc-09.png)
+
 ## 使用したもの
 
 - [jQuery](https://jquery.com)
 - [jQueryUI](https://jqueryui.com)
+    - [jQueryUI Touch Punch](https://github.com/furf/jquery-ui-touch-punch)
 - サイコロの画像と処理
     - [JavaScript：サイコロを振る](https://torisky.com/javascript%EF%BC%9A%E3%82%B5%E3%82%A4%E3%82%B3%E3%83%AD%E3%82%92%E6%8C%AF%E3%82%8B/)
 - サイコロを振る音
