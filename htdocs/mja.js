@@ -400,6 +400,17 @@ $(function(){
             $(this).prop('checked', true);
         });
 
+        // 自摸あがりの時に他家の支払いにチェックを入れる
+        $(':checkbox[name="tsumo"]').change(function(){
+            var s = $(this).prop('checked');
+            $.each(kaze, function(i, v){
+                if ($(`:checkbox[name="w-${v}"]:checked`).length == 0) {
+                    $(`:checkbox[name="p-${v}"]`).prop('checked', s);
+                }
+            });
+            update_scores();
+        });
+
         // あがりと支払家数のチェック
         var check_inputs = function(){
             if ($(':checkbox[name|="w"]:checked').length != 1) {
