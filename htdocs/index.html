@@ -95,10 +95,10 @@
 
         <div id="calc" class="dialog" style="display: none;">
             <ul>
-                <li>東: <input name="ton" type="number" step="100" max="99900" min="-99900" autocomplete="off" class="cvalue" /> (<span class="s-ton"></span>点, <span class="n-ton"></span>)</li>
-                <li>南: <input name="nan" type="number" step="100" max="99900" min="-99900" autocomplete="off" class="cvalue" /> (<span class="s-nan"></span>点, <span class="n-nan"></span>)</li>
-                <li>西: <input name="sha" type="number" step="100" max="99900" min="-99900" autocomplete="off" class="cvalue" /> (<span class="s-sha"></span>点, <span class="n-sha"></span>)</li>
-                <li>北: <input name="pei" type="number" step="100" max="99900" min="-99900" autocomplete="off" class="cvalue" /> (<span class="s-pei"></span>点, <span class="n-pei"></span>)</li>
+                <li>東: <input name="ton" type="number" step="100" max="199900" min="-199900" autocomplete="off" class="cvalue" /> (<span class="s-ton"></span>点, <span class="n-ton"></span>)</li>
+                <li>南: <input name="nan" type="number" step="100" max="199900" min="-199900" autocomplete="off" class="cvalue" /> (<span class="s-nan"></span>点, <span class="n-nan"></span>)</li>
+                <li>西: <input name="sha" type="number" step="100" max="199900" min="-199900" autocomplete="off" class="cvalue" /> (<span class="s-sha"></span>点, <span class="n-sha"></span>)</li>
+                <li>北: <input name="pei" type="number" step="100" max="199900" min="-199900" autocomplete="off" class="cvalue" /> (<span class="s-pei"></span>点, <span class="n-pei"></span>)</li>
                 <li>供託: <input name="kyotaku" type="number" step="1000" max="20000" min="-20000" autocomplete="off" class="cvalue" /></li>
                 <li>差し引き: <span id="diff"></span></li>
             </ul>
@@ -147,10 +147,10 @@
                 精算 (支払: <span id="score"></span>)<br />
                 <label>連続精算<input name="preserve" type="checkbox" /></label>
                 <ul>
-                    <li>東家: <input type="number" name="s-ton" max="48000" min="-48000" readonly /> (<span class="n-ton"></span>)</li>
-                    <li>南家: <input type="number" name="s-nan" max="48000" min="-48000" readonly /> (<span class="n-nan"></span>)</li>
-                    <li>西家: <input type="number" name="s-sha" max="48000" min="-48000" readonly /> (<span class="n-sha"></span>)</li>
-                    <li>北家: <input type="number" name="s-pei" max="48000" min="-48000" readonly /> (<span class="n-pei"></span>)</li>
+                    <li>東家: <input type="number" name="s-ton" max="199000" min="-199000" readonly /> (<span class="n-ton"></span>)</li>
+                    <li>南家: <input type="number" name="s-nan" max="199000" min="-199000" readonly /> (<span class="n-nan"></span>)</li>
+                    <li>西家: <input type="number" name="s-sha" max="199000" min="-199000" readonly /> (<span class="n-sha"></span>)</li>
+                    <li>北家: <input type="number" name="s-pei" max="199000" min="-199000" readonly /> (<span class="n-pei"></span>)</li>
                 </ul>
             </div>
         </div>
@@ -182,7 +182,7 @@
         <div id="settings" class="dialog" style="display: none;">
             全体設定
             <ul>
-                <li>配給原点: <input type="number" name="genten" max="50000" min="0" step="1000" /></li>
+                <li>配給原点: <input type="number" name="genten" max="150000" min="0" step="1000" /></li>
                 <li><label><input type="checkbox" name="4mangan" />30符4翻 満貫切り上げ</label></li>
                 <li><label><input type="checkbox" name="1500hon" />一本場1500点</label></li>
                 <li><label><input type="checkbox" name="agaren" />親あがり連荘</label></li>
