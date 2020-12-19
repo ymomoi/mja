@@ -18,8 +18,10 @@ $(function(){
         $.lsset('kyotaku', 0);
         $.each(player, function(i, v){
             var p = { 'name': v, 'score': Number($.lsget('genten')), 'reach': false, 'agari': false };
-            var org = $.lsget(v);
-            if (org.name) { p.name = org.name; }
+            if ($.lshaskey(v)) {
+                var org = $.lsget(v);
+                if (org.name) { p.name = org.name; }
+            }
             $.lsset(v, p);
         });
     };
