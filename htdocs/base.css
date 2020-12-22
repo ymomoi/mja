@@ -113,6 +113,9 @@ body {
     top: 410px;
     left: 260px;
 }
+#playerinfo > ol > li::marker {
+    content: "p" counter(list-item) " ";
+}
 .yakitori {
     position: absolute;
     top: -6px;
