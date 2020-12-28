@@ -275,6 +275,20 @@ $(function(){
         $.each(player, function(i, v){
             $(`:input[name="${v}"]`).val($.lsget(v).name);
         });
+        $(':checkbox[name|="pn"]').prop('checked', false);
+
+        // 2ヶ所チェックされたら、その2つを入れ替える
+        $(':checkbox[name|="pn"]').change(function(){
+            var ps = $(':checkbox[name|="pn"]:checked');
+            if (ps.length != 2) { return; }
+            var a = $(ps[0]).val();
+            var b = $(ps[1]).val();
+            var an = $(`:input[name="${a}"]`).val();
+            var bn = $(`:input[name="${b}"]`).val();
+            $(`:input[name="${b}"]`).val(an);
+            $(`:input[name="${a}"]`).val(bn);
+            $(':checkbox[name|="pn"]').prop('checked', false);
+        });
 
         $('#playerinfo').dialog({
             modal: true,
@@ -284,11 +298,8 @@ $(function(){
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
                 '更新': function(){
-                    // form の順番に p1〜p4 に設定する
-                    var i = 1;
-                    $('#playerinfo :input').each(function(){
-                        player_name(`p${i}`, $(this).val());
-                        i++;
+                    $.each(player, function(i, v){
+                        player_name(v, $(`:input[name="${v}"]`).val());
                     });
                     redraw_all();
                     $(this).dialog('close');

@@ -108,8 +108,6 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 
 - [jQuery](https://jquery.com)
 - [jQueryUI](https://jqueryui.com)
-    - [jQueryUI Touch Punch](https://github.com/furf/jquery-ui-touch-punch)
-    - スマホ対応 [jQueryUI Touch Punch (fork for smartphone use)](https://github.com/ymomoi/jquery-ui-touch-punch)
 - サイコロの画像と処理
     - [JavaScript：サイコロを振る](https://torisky.com/javascript%EF%BC%9A%E3%82%B5%E3%82%A4%E3%82%B3%E3%83%AD%E3%82%92%E6%8C%AF%E3%82%8B/)
 - サイコロを振る音
