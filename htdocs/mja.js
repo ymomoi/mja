@@ -10,7 +10,7 @@ $(function(){
     const player = [ 'p1', 'p2', 'p3', 'p4' ];
     const kaze = [ 'ton', 'nan', 'sha', 'pei' ];
     const kaze_str = [ '東', '南', '西', '北' ];
-    const jikaze_str = [ '東(親)', '南', '西', '北' ];
+    const jikaze_str = [ '東(親)', '南　　', '西　　', '北　　' ];
     var init_all = function(){
         $.lsset('bakaze', 0);
         $.lsset('kyoku', 1);
@@ -132,11 +132,13 @@ $(function(){
             String(s[2]-s[3]) + '/' + String(s[1]-s[3]) + '/' + String(s[0]-s[3]),
         ];
         $.each(player, function(i, v){
-            $(`#${v} > .player`).text($.lsget(v).name);
+            var nlen = $.lsget(v).name.length;
+            var nstr = $.lsget(v).name + '　'.repeat(Math.max(15-nlen, 1));
+            $(`#${v} > .player`).text(nstr);
             $(`#${v} > .kaze`).text(jikaze.shift());
             $(`#${v} > .score`).text(s.shift());
             $(`#${v} > .score_diff`).text(diff.shift());
-            $(`#${v} > .reach`).text($.lsget(v).reach ? 'リーチ' : '');
+            $(`#${v} > .reach`).text($.lsget(v).reach ? 'リーチ' : '　　　');
             if ($.lsget(v).agari) {
                 $(`#${v} > .yakitori`).addClass('inactive');
             } else {
@@ -323,11 +325,11 @@ $(function(){
 
         id = $(this).parent().attr('id');
         switch ($(`#${id} > .kaze`).text()) {
-            case '南':
+            case '南　　':
                 $(':checkbox[name="w-nan"]').prop('checked', true); break;
-            case '西':
+            case '西　　':
                 $(':checkbox[name="w-sha"]').prop('checked', true); break;
-            case '北':
+            case '北　　':
                 $(':checkbox[name="w-pei"]').prop('checked', true); break;
             default:
                 $(':checkbox[name="w-ton"]').prop('checked', true); break;
