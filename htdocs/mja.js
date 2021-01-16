@@ -173,7 +173,7 @@ $(function(){
     // ログを出力
     var log_output = function(str){
         var t = $('#log').html();
-        $('#log').html(t + now_timestr() + ' ' + str + "\n");
+        $('#log').html(now_timestr() + ' ' + str + "\n" + t);
     };
 
     // プレイヤー名と点棒状況の文字列を作成する
