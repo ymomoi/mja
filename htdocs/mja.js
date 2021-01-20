@@ -209,8 +209,8 @@ $(function(){
         });
         // historyは直近の30件を保存
         var h = $.lsget('history');
-        if (h.length >= 30) { h.pop(); }
         h.unshift(s);
+        if (h.length > 30) { h.length = 30; }
         $.lsset('history', h);
     };
 
@@ -272,7 +272,6 @@ $(function(){
 
     //--------------------------------
     // プレイヤー情報入力ダイアログ
-    $('#playerinfo > .sortable').sortable();
     $(':button[name="player_name"]').click(function(){
         $.each(player, function(i, v){
             $(`:input[name="${v}"]`).val($.lsget(v).name);
