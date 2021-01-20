@@ -313,17 +313,26 @@ $(function(){
             });
             $('select[name="pname"]').html(o);
 
-            $('select[name="pname"] option').click(function(){
-                var n = $(this).text();
+            var setname = function(e){
+                var n = $(e.target).text();
                 $(`:input[name="${pn}"]`).val(n);
                 $('#phist').dialog('close');
-            });
+            };
+            $('select[name="pname"] option').click(setname);
+            $('select[name="pname"] option').change(setname);
 
             $('#phist').dialog({
                 modal: true,
                 position: { my: 'left+5% top+5%', at: 'left top' },
                 width: '700px',
                 title: 'プレイヤー名選択',
+                buttons: {
+                    '設定': function(){
+                        var n = $('#phist option:selected').text();
+                        $(`:input[name="${pn}"]`).val(n);
+                        $('#phist').dialog('close');
+                    },
+                }
             });
         });
 
