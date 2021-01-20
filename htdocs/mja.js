@@ -29,6 +29,9 @@ $(function(){
     if (!Array.isArray($.lsget('history'))) {
         $.lsset('history', []);
     }
+    if (!Array.isArray($.lsget('phist'))) {
+        $.lsset('phist', player);
+    }
 
     //--------------------------------
     // 親/子の点数を返す
@@ -98,6 +101,17 @@ $(function(){
         var d = $.lsget(id);
         d.agari = v;
         $.lsset(id, d);
+    };
+
+    // プレイヤー名の履歴を保存する(重複しない10件まで)
+    var store_phist = function(){
+        var h = $.lsget('phist');
+        $.each(player, function(i, v){
+            h.unshift($.lsget(v).name);
+        });
+        var n = Array.from(new Set(h));
+        if (n.length > 10) { n.length = 10; }
+        $.lsset('phist', n);
     };
 
     // 右ローテート
@@ -291,10 +305,33 @@ $(function(){
             $(':checkbox[name|="pn"]').prop('checked', false);
         });
 
+        // プレイヤー名を履歴から入力する
+        $('.pselect').click(function(){
+            var pn = $(this).prop('name');
+            var o = $.map($.lsget('phist'), function(v){
+                return `<option>${v}</option>`;
+            });
+            $('select[name="pname"]').html(o);
+
+            $('select[name="pname"] option').click(function(){
+                var n = $(this).text();
+                $(`:input[name="${pn}"]`).val(n);
+                $('#phist').dialog('close');
+            });
+
+            $('#phist').dialog({
+                modal: true,
+                position: { my: 'left+5% top+5%', at: 'left top' },
+                width: '700px',
+                title: 'プレイヤー名選択',
+            });
+        });
+
+        // ダイアログ表示
         $('#playerinfo').dialog({
             modal: true,
             position: { my: 'left+5% top+5%', at: 'left top' },
-            width: '600px',
+            width: '700px',
             title: 'プレイヤー情報入力',
             buttons: {
                 'キャンセル': function(){ $(this).dialog('close'); },
@@ -302,6 +339,7 @@ $(function(){
                     $.each(player, function(i, v){
                         player_name(v, $(`:input[name="${v}"]`).val());
                     });
+                    store_phist();
                     redraw_all();
                     $(this).dialog('close');
                 },
