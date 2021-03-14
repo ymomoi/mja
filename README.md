@@ -50,6 +50,8 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 - 流局精算ダイアログ
     - テンパイしていたプレイヤーを指定します
     - 親がノーテンの時は局が進みます
+- 点数コピーボタン
+    - 現在の点数状況(テキスト)をクリップボードにコピーします
 
 ### マニュアル操作用
 
@@ -110,6 +112,7 @@ HTML/CSSとJavaScript (jQuery) しか使ってません。サーバかローカ�
 
 - [jQuery](https://jquery.com)
 - [jQueryUI](https://jqueryui.com)
+- [clipboard.js](https://clipboardjs.com/)
 - サイコロの画像と処理
     - [JavaScript：サイコロを振る](https://torisky.com/javascript%EF%BC%9A%E3%82%B5%E3%82%A4%E3%82%B3%E3%83%AD%E3%82%92%E6%8C%AF%E3%82%8B/)
 - サイコロを振る音
