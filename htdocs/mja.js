@@ -1,6 +1,7 @@
 $(function(){
     //--------------------------------
     // グローバル設定
+    new ClipboardJS('.btn');
     if (!$.lshaskey('genten'))  { $.lsset('genten', 25000);  }
     if (!$.lshaskey('4mangan')) { $.lsset('4mangan', false); }
     if (!$.lshaskey('1500hon')) { $.lsset('1500hon', false); }
@@ -202,11 +203,11 @@ $(function(){
 
     // 点数状況を出力
     var output_scores = function(){
-        var str = bakaze() + $.lsget('kyoku') + '局 ' +
+        var str1 = bakaze() + $.lsget('kyoku') + '局 ' +
             $.lsget('hon') + '本場: ' + "<br />\n";
-        str += player_status();
-        str += '(供託 ' + $.lsget('kyotaku') + '点)<br />';
-        log_output(str);
+        var str2 = player_status() + '(供託 ' + $.lsget('kyotaku') + '点)';
+        log_output(str1 + str2 + '<br />');
+        $('.btn').attr('data-clipboard-text', str2);
     };
 
     // 場とプレイヤー情報をhistoryに保存
