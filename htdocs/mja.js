@@ -292,6 +292,15 @@ $(function(){
         });
         $(':checkbox[name|="pn"]').prop('checked', false);
 
+        // 起家を回転させる
+        var protate = function(){
+            var p1 = $(`:input[name="p1"]`).val();
+            $(`:input[name="p1"]`).val($(`:input[name="p2"]`).val());
+            $(`:input[name="p2"]`).val($(`:input[name="p3"]`).val());
+            $(`:input[name="p3"]`).val($(`:input[name="p4"]`).val());
+            $(`:input[name="p4"]`).val(p1);
+        };
+
         // 2ヶ所チェックされたら、その2つを入れ替える
         $(':checkbox[name|="pn"]').change(function(){
             var ps = $(':checkbox[name|="pn"]:checked');
@@ -343,6 +352,7 @@ $(function(){
             width: '700px',
             title: 'プレイヤー情報入力',
             buttons: {
+                '起家回転': protate,
                 'キャンセル': function(){ $(this).dialog('close'); },
                 '更新': function(){
                     $.each(player, function(i, v){
